@@ -10,8 +10,16 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/obedthomas/gcip-auth-api.git"
+  },
   "author": "Obed Thomas",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/obedthomas/gcip-auth-api/issues"
+  },
+  "homepage": "https://github.com/obedthomas/gcip-auth-api#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "config": "^3.2.2",
