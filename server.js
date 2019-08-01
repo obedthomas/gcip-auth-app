@@ -17,9 +17,14 @@ app.use(helmet())
 connectDB()
 
 //Test endpoint
+const data = {
+  firstName: 'Obed',
+  lastName: 'Thomas',
+  email: 'itsolutions@gcipltd.com',
+  token: '1234567898dadwad',
+}
 app.get('/api/', (req, res) => {
-  newUserEmail()
-  res.send('API Running')
+  newUserEmail(data, res)
 })
 
 // Endpoints
