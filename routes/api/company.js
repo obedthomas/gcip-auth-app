@@ -1,7 +1,8 @@
 const router = require('express').Router()
 const { check, validationResult } = require('express-validator')
-const Company = require('../../models/Company')
 const auth = require('../../middleware/auth')
+// Models
+const Company = require('../../models/Company')
 
 // @type    :   GET
 // @route   :   api/company
