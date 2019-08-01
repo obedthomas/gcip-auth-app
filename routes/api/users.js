@@ -3,13 +3,29 @@ const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
-const User = require('../../models/User')
 const auth = require('../../middleware/auth')
+// Models
+const User = require('../../models/User')
+const Company = require('../../models/Company')
+
+// @type    :   GET
+// @route   :   api/user
+// @desc    :   Get an array of all users
+// @access  :   PRIVATE
+router.get('/', auth('all'), async (req, res) => {
+  try {
+    const users = await User.find().select('-password')
+    res.json({ users })
+  } catch (err) {
+    console.error(err.message)
+    return res.status(500).send('Server Error')
+  }
+})
 
 // @type    :   POST
-// @route   :   api/users/register
+// @route   :   api/user/register
 // @desc    :   Register a new user
-// @access  :   Private
+// @access  :   PRIVATE/admin
 router.post(
   '/register',
   [
@@ -22,7 +38,13 @@ router.post(
       check('lastName', 'Last name is required')
         .not()
         .isEmpty(),
-      check('role', 'Role must be assigned')
+      check('role', 'Role is required')
+        .not()
+        .isEmpty(),
+      check('department', 'Department is required')
+        .not()
+        .isEmpty(),
+      check('company', 'Company is required')
         .not()
         .isEmpty(),
       check('email', 'Please include a valid email').isEmail(),
@@ -39,17 +61,27 @@ router.post(
       return res.status(400).json({ errors: errors.array() })
     }
     // if no errors
-    const { firstName, lastName, email, password, role } = req.body
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      department,
+      company,
+    } = req.body
 
     try {
       // See if user exists
       let user = await User.findOne({ email })
-      console.log(role)
       if (user) {
         return res
           .status(400)
           .json({ errors: [{ msg: 'User already exists' }] })
       }
+      // See if company is valid
+      const isCompany = await Company.findById(company)
+      if (!isCompany) res.status(404).json({ msg: 'Company does not exist' })
       // Create new user instance
       user = new User({
         firstName,
@@ -57,6 +89,8 @@ router.post(
         email,
         password,
         role,
+        department,
+        company,
       })
       // Encrypt password
       const salt = await bcrypt.genSalt(10)
@@ -93,7 +127,7 @@ router.post(
 )
 
 // @type    :   DELETE
-// @route   :   api/users/:id
+// @route   :   api/user/:id
 // @desc    :   Delete a user
 // @access  :   PRIVATE/admin
 router.delete('/:id', auth('admin'), async (req, res) => {

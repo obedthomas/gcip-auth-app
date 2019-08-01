@@ -11,7 +11,7 @@ const Company = require('../../models/Company')
 router.get('/', auth('all'), async (req, res) => {
   try {
     const companies = await Company.find()
-    res.json(companies)
+    res.json({ companies })
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server Error')
