@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const auth = require('../../middleware/auth')
+const newUserEmail = require('../../utils/newUserEmail')
 // Models
 const User = require('../../models/User')
 const Company = require('../../models/Company')
@@ -97,6 +98,8 @@ router.post(
       user.password = await bcrypt.hash(password, salt)
       // Save user instance to DB
       await user.save()
+      // Send email to new user
+
       // Return JWT to automatically log user in.
       const payload = {
         user: {
