@@ -7,7 +7,7 @@ const User = require('../../models/User')
 const auth = require('../../middleware/auth')
 
 // @type    :   POST
-// @route   :   api/register
+// @route   :   api/users/register
 // @desc    :   Register a new user
 // @access  :   Private
 router.post(
@@ -91,5 +91,23 @@ router.post(
     }
   }
 )
+
+// @type    :   DELETE
+// @route   :   api/users/:id
+// @desc    :   Delete a user
+// @access  :   PRIVATE/admin
+router.delete('/:id', auth('admin'), async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+    if (!user) return res.status(404).json({ msg: 'User not found' })
+    user.remove()
+    return res.json({ msg: 'User removed' })
+  } catch (err) {
+    console.error(err.message)
+    return err.kind === 'ObjectId'
+      ? res.status(404).json({ msg: 'User not found' })
+      : res.status(500).send('Server Error')
+  }
+})
 
 module.exports = router

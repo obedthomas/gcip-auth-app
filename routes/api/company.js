@@ -60,4 +60,25 @@ router.post(
   }
 )
 
+// @type    :   DELETE
+// @route   :   api/company/:id
+// @desc    :   delete a company
+// @access  :   PRIVATE/admin
+router.delete('/:id', auth('admin'), async (req, res) => {
+  try {
+    // see if company exists
+    const company = await Company.findById(req.params.id)
+    // handle company !exists
+    if (!company) return res.status(404).json({ msg: 'Company not found' })
+    // save company to DB
+    await company.remove()
+    return res.json({ msg: 'Company removed' })
+  } catch (err) {
+    console.error(err.message)
+    return err.kind === 'ObjectId'
+      ? res.status(404).json({ msg: 'Company not found' })
+      : res.status(500).send('Server Error') // check devconnector-delete post if error unknown
+  }
+})
+
 module.exports = router
