@@ -1,0 +1,5 @@
+{
+  "mongoURI": "mongodb://dev:GoodDay777@10.10.10.113:27017/gcip-auth-api",
+  "jwtSecret": "uVy?h,P6W;vV7kGM",
+  "tokenExpiryTime": "20d"
+}
