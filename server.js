@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const helmet = require('helmet')
 const connectDB = require('./config/db')
+const newUserEmail = require('./utils/newUserEmail')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -16,7 +17,10 @@ app.use(helmet())
 connectDB()
 
 //Test endpoint
-app.get('/api/', (req, res) => res.send('API Running'))
+app.get('/api/', (req, res) => {
+  newUserEmail()
+  res.send('API Running')
+})
 
 // Endpoints
 app.use('/api/auth', require('./routes/api/auth'))
