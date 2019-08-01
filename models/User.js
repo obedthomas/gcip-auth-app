@@ -35,6 +35,10 @@ const UserSchema = new mongoose.Schema({
     ref: 'company',
     required: true,
   },
+  active: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 module.exports = User = mongoose.model('user', UserSchema)
