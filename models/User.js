@@ -30,6 +30,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  changePasswordToken: {
+    type: String,
+  },
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'company',
