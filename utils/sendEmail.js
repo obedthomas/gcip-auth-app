@@ -1,5 +1,4 @@
 const config = require('config')
-const template = require('../emailTemplates/newStaff')
 const mg = config.get('mailgun')
 const clientUrl = config.get('clientUrl')
 const mailgun = require('mailgun-js')({
@@ -7,14 +6,31 @@ const mailgun = require('mailgun-js')({
   domain: mg.domain,
 })
 
-const newUserEmail = (firstName, lastName, email, token) => {
+const sendEmail = ({ firstName, lastName, email, token, template }) => {
+  // import relevant template
+  let htmlTemplate = require(`../emailTemplates/${template}`)
+  let subject = ''
+  switch (template) {
+    case 'newStaff':
+      subject = 'Activate your account'
+      break
+
+    case 'recoverPassword':
+      subject = 'Forgot your password?'
+      break
+
+    default:
+      subject = ''
+      break
+  }
+
   return new Promise((resolve, reject) => {
     const link = `${clientUrl}/public/register/${token}`
-    const html = template(firstName, lastName, link)
+    const html = htmlTemplate(firstName, lastName, link)
     const data = {
       from: 'IT <postmaster@mg.gcipltd.com>',
       to: email,
-      subject: 'Activate your account',
+      subject,
       html,
     }
 
@@ -27,4 +43,4 @@ const newUserEmail = (firstName, lastName, email, token) => {
   })
 }
 
-module.exports = newUserEmail
+module.exports = sendEmail

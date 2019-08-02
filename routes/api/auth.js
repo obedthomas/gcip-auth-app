@@ -50,7 +50,14 @@ router.post(
       // match email and password to DB - use bcrypt to compare
       const isMatch = await bcrypt.compare(password, user.password)
       if (!isMatch) {
-        res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] })
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] })
+      }
+      if (!user.active) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Account is inactive' }] })
       }
 
       // return JWT to auto log user in
