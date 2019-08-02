@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
+const uuid = require('uuid/v4')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const auth = require('../../middleware/auth')
@@ -83,6 +84,8 @@ router.post(
       // See if company is valid
       const isCompany = await Company.findById(company)
       if (!isCompany) res.status(404).json({ msg: 'Company does not exist' })
+      // Create changePasswordToken
+      const changePasswordToken = uuid()
       // Create new user instance
       user = new User({
         firstName,
@@ -92,6 +95,7 @@ router.post(
         role,
         department,
         company,
+        changePasswordToken,
       })
       // Encrypt password
       const salt = await bcrypt.genSalt(10)
@@ -99,29 +103,17 @@ router.post(
       // Save user instance to DB
       await user.save()
       // Send email to new user
-
-      // Return JWT to automatically log user in.
-      const payload = {
-        user: {
-          id: user.id,
-          role: user.role,
-        },
-      }
-      // create JWT
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        {
-          expiresIn: config.get('tokenExpiryTime'),
-        },
-        (err, token) => {
-          if (err) {
-            throw err
-          } else {
-            return res.json({ token })
-          }
-        }
+      const emailRes = await newUserEmail(
+        user.firstName,
+        user.lastName,
+        user.email,
+        user.changePasswordToken
       )
+      if (emailRes.message.includes('Queued')) {
+        return res.json({ msg: 'User created', data: emailRes })
+      } else {
+        return res.status(400).json({ errors: [{ msg: emailRes }] })
+      }
     } catch (err) {
       console.error(err.message)
       return res.status(500).send('Server Error')

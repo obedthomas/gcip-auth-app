@@ -7,27 +7,24 @@ const mailgun = require('mailgun-js')({
   domain: mg.domain,
 })
 
-const newUserEmail = async (data, res) => {
-  const { firstName, lastName, email, token } = data
-  const link = `${clientUrl}/public/register/${token}`
-  const html = await template(firstName, lastName, link)
-
-  try {
+const newUserEmail = (firstName, lastName, email, token) => {
+  return new Promise((resolve, reject) => {
+    const link = `${clientUrl}/public/register/${token}`
+    const html = template(firstName, lastName, link)
     const data = {
-      from: 'IT <itsolutions@gcipltd.com>',
+      from: 'IT <postmaster@mg.gcipltd.com>',
       to: email,
-      subject: firstName,
+      subject: 'Activate your account',
       html,
     }
 
-    mailgun.messages().send(data, (err, body) => {
-      console.log(body)
-      return res.json({ body })
+    Promise.all([link, html, data]).then(values => {
+      values &&
+        mailgun.messages().send(data, (err, body) => {
+          return !err ? resolve(body) : reject(err)
+        })
     })
-  } catch (err) {
-    console.log(err.message)
-    return res.send(err)
-  }
+  })
 }
 
 module.exports = newUserEmail

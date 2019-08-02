@@ -2,7 +2,8 @@ const express = require('express')
 const morgan = require('morgan')
 const helmet = require('helmet')
 const connectDB = require('./config/db')
-const newUserEmail = require('./utils/newUserEmail')
+// test imports
+const auth = require('./middleware/auth')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -17,14 +18,8 @@ app.use(helmet())
 connectDB()
 
 //Test endpoint
-const data = {
-  firstName: 'Obed',
-  lastName: 'Thomas',
-  email: 'itsolutions@gcipltd.com',
-  token: '1234567898dadwad',
-}
-app.get('/api/', (req, res) => {
-  newUserEmail(data, res)
+app.get('/api/', auth('all'), (req, res) => {
+  res.json({ data: req.user })
 })
 
 // Endpoints

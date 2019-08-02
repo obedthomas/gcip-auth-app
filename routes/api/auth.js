@@ -58,6 +58,7 @@ router.post(
         user: {
           id: user.id,
           role: user.role,
+          active: user.active,
         },
       }
       jwt.sign(

@@ -7,11 +7,18 @@ module.exports = role => {
     const token = req.header('Authorization')
     // check if there is a token
     if (!token) {
-      return res.status(401).json({ msg: 'No token, authorization denied' })
+      return res
+        .status(401)
+        .json({ errors: [{ msg: 'No token, authorization denied' }] })
     }
     try {
       const decoded = jwt.verify(token.substring(7), config.get('jwtSecret'))
       req.user = decoded.user
+      // check active status
+      if (!req.user.active)
+        return res
+          .status(401)
+          .json({ errors: [{ msg: 'Account is inactive' }] })
       // check if role requirment is correct
       if (
         role === 'all' ||
@@ -20,10 +27,12 @@ module.exports = role => {
       ) {
         next()
       } else {
-        res.status(401).json({ msg: 'Insufficient Privileges' })
+        return res
+          .status(401)
+          .json({ errors: [{ msg: 'Insufficient privileges' }] })
       }
     } catch (err) {
-      res.status(401).json({ msg: 'Token is not valid' })
+      return res.status(401).json({ errors: [{ msg: 'Token is not valid' }] })
     }
   }
 }
