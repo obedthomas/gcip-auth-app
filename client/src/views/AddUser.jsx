@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 // reactstrap components
@@ -12,8 +12,12 @@ import passGenerator from './../utils/passGenerator'
 // redux
 import { register } from '../actions/auth'
 import { setAlert } from './../actions/alert'
+import { getCompanies } from './../actions/company'
 
-const AddUser = ({ history, setAlert, register }) => {
+const AddUser = ({ history, setAlert, register, companies, getCompanies }) => {
+  useEffect(() => {
+    getCompanies()
+  }, [])
   const [formData, setFormData] = useState({
     firstName: '',
     firstNameCheck: null,
@@ -76,21 +80,19 @@ const AddUser = ({ history, setAlert, register }) => {
   }
 
   const deptOptions = [
-    { title: 'Payroll' },
-    { title: 'IT' },
-    { title: 'Accounting' },
-    { title: 'Properties' },
+    { name: 'Payroll' },
+    { name: 'IT' },
+    { name: 'Accounting' },
+    { name: 'Properties' },
   ]
-
-  const companyOptions = [{ title: 'GCIP' }, { title: 'GCUS' }]
 
   const roleOptions = [
-    { title: 'admin' },
-    { title: 'manager' },
-    { title: 'employee' },
+    { name: 'Admin' },
+    { name: 'Manager' },
+    { name: 'Employee' },
   ]
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault()
     const data = {
       firstName,
@@ -101,7 +103,7 @@ const AddUser = ({ history, setAlert, register }) => {
       company,
       password,
     }
-    register(data)
+    await register(data, history.push)
   }
 
   return (
@@ -181,7 +183,7 @@ const AddUser = ({ history, setAlert, register }) => {
                       valid={companyCheck}
                       onChange={onChange}
                       label="Company"
-                      options={companyOptions}
+                      options={companies}
                       required
                     />
                   </Col>
@@ -228,7 +230,11 @@ AddUser.propTypes = {
   register: PropTypes.func.isRequired,
 }
 
+const mapStateToProps = state => ({
+  companies: state.company.companies,
+})
+
 export default connect(
-  null,
-  { register, setAlert }
+  mapStateToProps,
+  { register, setAlert, getCompanies }
 )(AddUser)

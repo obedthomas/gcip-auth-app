@@ -34,9 +34,12 @@ const FormSelectInput = ({
 
   // dynamically render options passed in from parent component
   const renderOptions = () => {
-    return options.map(option => (
-      <option key={option.title} value={option.title.toLowerCase()}>
-        {option.title}
+    return options.map((option, i) => (
+      <option
+        key={option._id ? option._id : i}
+        value={option._id ? option._id : option.name}
+      >
+        {option.name}
       </option>
     ))
   }

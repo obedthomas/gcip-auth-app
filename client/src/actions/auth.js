@@ -1,7 +1,5 @@
 import axios from 'axios'
 import {
-  REGISTER_FAIL,
-  REGISTER_SUCCESS,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
@@ -54,15 +52,16 @@ export const loadUser = () => async dispatch => {
   }
 }
 
-// Register User
-export const register = data => async dispatch => {
+// Create User
+export const register = (data, push) => async dispatch => {
   const config = {
     headers: { 'Content-Type': 'application/json' },
   }
   const body = JSON.stringify(data)
   try {
-    const res = await axios.post('/api/user/register', body, config)
+    await axios.post('/api/user/register', body, config)
     dispatch(setAlert('User has been created', 'success'))
+    push('/admin/users')
   } catch (err) {
     // handle error sent by API
     const errors = err.response.data.errors

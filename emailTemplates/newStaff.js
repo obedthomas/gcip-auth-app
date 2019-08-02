@@ -1,13 +1,22 @@
-const template = (firstName, lastName, link) => {
+const template = (firstName, lastName, link, tempPass) => {
   const currYear = new Date().getFullYear()
   let body = `
   <!doctype html>
   <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
       <head>
+          <!-- NAME: EDUCATE -->
+          <!--[if gte mso 15]>
+          <xml>
+              <o:OfficeDocumentSettings>
+              <o:AllowPNG/>
+              <o:PixelsPerInch>96</o:PixelsPerInch>
+              </o:OfficeDocumentSettings>
+          </xml>
+          <![endif]-->
           <meta charset="UTF-8">
           <meta http-equiv="X-UA-Compatible" content="IE=edge">
           <meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>GC Account Activation</title>
+          <title>Account Activation</title>
           
       <style type="text/css">
       p{
@@ -482,9 +491,9 @@ const template = (firstName, lastName, link) => {
   
   }</style></head>
       <body>
-          
-          <!--[if !gte mso 9]><!----><span class="mcnPreviewText" style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">You must activate your account before using any GC apps.</span><!--<![endif]-->
-          
+          <!--*|IF:MC_PREVIEW_TEXT|*-->
+          <!--[if !gte mso 9]><!----><span class="mcnPreviewText" style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden; mso-hide:all;">Please activate your account to access one or more GC application</span><!--<![endif]-->
+          <!--*|END:IF|*-->
           <center>
               <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
                   <tr>
@@ -508,9 +517,9 @@ const template = (firstName, lastName, link) => {
                           <tbody><tr>
                               <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
                                   
-                                      
-                                          <img align="center" alt="GCIP.Ltd" src="https://gallery.mailchimp.com/bbf015405e70e62d77c7c5252/images/de17b9b5-27bb-4e3b-a140-b359f5859cb5.png" width="300" style="max-width:300px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
-                                      
+                                      <a href="http://www.gcipltd.com" title="" class="" target="_blank">
+                                          <img align="center" alt="Global Challenge" src="https://gallery.mailchimp.com/bbf015405e70e62d77c7c5252/images/de17b9b5-27bb-4e3b-a140-b359f5859cb5.png" width="300" style="max-width:300px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+                                      </a>
                                   
                               </td>
                           </tr>
@@ -558,9 +567,12 @@ const template = (firstName, lastName, link) => {
   
   <h2>Access Granted</h2>
   
-  <p style="font-size:18px !important;">In order for you to have access to one or more Global Challenge apps, you must have an active account</p>
+  <p style="font-size:18px !important;">In order for you to have to one or more of the Global Challenge online apps, you must have an active account</p>
   
-  <p style="font-size:18px !important;">Please click the link below and fill in the necessary details to activate your account.</p>
+  <p style="font-size:18px !important;">Please click the link below and fill in the necessary details to activate your account.<br>
+  <br>
+  <span style="color:#333333"><strong>Temporary Password:</strong></span><br>
+  ${tempPass}</p>
   
                           </td>
                       </tr>
@@ -667,39 +679,7 @@ const template = (firstName, lastName, link) => {
                                       <![endif]-->
                                       <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
                                           <tr>
-                                              <td valign="top" class="footerContainer"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowBlock" style="min-width:100%;">
-      <tbody class="mcnFollowBlockOuter">
-          <tr>
-              <td align="center" valign="top" style="padding:9px" class="mcnFollowBlockInner">
-                  <table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnFollowContentContainer" style="min-width:100%;">
-      <tbody><tr>
-          <td align="center" style="padding-left:9px;padding-right:9px;">
-              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width:100%;" class="mcnFollowContent">
-                  <tbody><tr>
-                      <td align="center" valign="top" style="padding-top:9px; padding-right:9px; padding-left:9px;">
-                          <table align="center" border="0" cellpadding="0" cellspacing="0">
-                              <tbody><tr>
-                                  <td align="center" valign="top">
-                                      <!--[if mso]>
-                                      <table align="center" border="0" cellspacing="0" cellpadding="0">
-                                      <tr>
-                                      <![endif]-->
-                                      
-                                          
-                                  </td>
-                              </tr>
-                          </tbody></table>
-                      </td>
-                  </tr>
-              </tbody></table>
-          </td>
-      </tr>
-  </tbody></table>
-  
-              </td>
-          </tr>
-      </tbody>
-  </table><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width:100%;">
+                                              <td valign="top" class="footerContainer"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnDividerBlock" style="min-width:100%;">
       <tbody class="mcnDividerBlockOuter">
           <tr>
               <td class="mcnDividerBlockInner" style="min-width:100%; padding:18px;">
@@ -734,7 +714,7 @@ const template = (firstName, lastName, link) => {
                           
                           <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
                           
-                              <em>Copyright © ${currYear} GCIP.Ltd, All rights reserved.</em><br>
+                              <em>Copyright © ${currYear}* GCIP.Ltd, All rights reserved.</em><br>
   <br>
   <strong>Our mailing address is:</strong><br>
   8 Conqueror Court, Staplehurst Road, Sittingbourne, Kent, ME10 5BH
@@ -770,6 +750,7 @@ const template = (firstName, lastName, link) => {
           </center>
       </body>
   </html>
+  
   `
 
   return body

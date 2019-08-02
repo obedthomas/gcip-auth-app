@@ -105,7 +105,6 @@ class AdminLayout extends Component {
 
 AdminLayout.propTypes = {
   auth: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({

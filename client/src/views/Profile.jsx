@@ -8,16 +8,11 @@ import ProfileHeader from '../components/Headers/ProfileHeader'
 import FormCard from '../components/FormInputs/FormCard'
 import FormInput from '../components/FormInputs/FormInput'
 
-const Profile = ({ auth }) => {
+const Profile = ({ user }) => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    role: '',
-    department: '',
-    email: '',
-    password: '',
+    ...user,
   })
-  const { firstName, lastName, role, department, email } = formData
+  const { firstName, lastName, role, department, email, company } = formData
 
   const onChange = e => {
     e.preventDefault()
@@ -26,7 +21,7 @@ const Profile = ({ auth }) => {
 
   return (
     <div>
-      <ProfileHeader user={auth.user} />
+      <ProfileHeader user={user} />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Col className="order-xl-1" xl="8">
@@ -70,10 +65,19 @@ const Profile = ({ auth }) => {
               <hr className="my-4" />
               {/* form section */}
               <h6 className="heading-small text-muted mb-4">
-                Department Details
+                Association Details
               </h6>
               <div className="pl-lg-4">
                 <Row>
+                  <Col lg="6">
+                    <FormInput
+                      type="text"
+                      name="company"
+                      value={company}
+                      onChange={onChange}
+                      label="Company"
+                    />
+                  </Col>
                   <Col lg="6">
                     <FormInput
                       type="text"
@@ -103,11 +107,11 @@ const Profile = ({ auth }) => {
 }
 
 Profile.propTypes = {
-  auth: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth,
+  user: state.auth.user,
 })
 
 export default connect(mapStateToProps)(Profile)

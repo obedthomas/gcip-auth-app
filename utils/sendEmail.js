@@ -6,7 +6,14 @@ const mailgun = require('mailgun-js')({
   domain: mg.domain,
 })
 
-const sendEmail = ({ firstName, lastName, email, token, template }) => {
+const sendEmail = ({
+  firstName,
+  lastName,
+  email,
+  token,
+  template,
+  tempPass,
+}) => {
   // import relevant template
   let htmlTemplate = require(`../emailTemplates/${template}`)
   let subject = ''
@@ -26,7 +33,7 @@ const sendEmail = ({ firstName, lastName, email, token, template }) => {
 
   return new Promise((resolve, reject) => {
     const link = `${clientUrl}/public/register/${token}`
-    const html = htmlTemplate(firstName, lastName, link)
+    const html = htmlTemplate(firstName, lastName, link, tempPass)
     const data = {
       from: 'IT <postmaster@mg.gcipltd.com>',
       to: email,

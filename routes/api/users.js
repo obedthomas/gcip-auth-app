@@ -98,6 +98,8 @@ router.post(
         company,
         changePasswordToken,
       })
+      // store temporary password
+      const tempPass = password
       // Encrypt password
       const salt = await bcrypt.genSalt(10)
       user.password = await bcrypt.hash(password, salt)
@@ -110,6 +112,7 @@ router.post(
         email: user.email,
         token: user.changePasswordToken,
         template: 'newStaff',
+        tempPass,
       }
       const emailRes = await sendEmail(emailData)
 
