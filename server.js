@@ -18,7 +18,7 @@ app.use(helmet())
 connectDB()
 
 //Test endpoint
-app.get('/api/', auth('all'), (req, res) => {
+app.get('/api/', (req, res) => {
   res.json({ data: req.user })
 })
 

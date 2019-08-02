@@ -83,7 +83,8 @@ router.post(
       }
       // See if company is valid
       const isCompany = await Company.findById(company)
-      if (!isCompany) res.status(404).json({ msg: 'Company does not exist' })
+      if (!isCompany)
+        res.status(404).json({ errors: [{ msg: 'Company does not exist' }] })
       // Create changePasswordToken
       const changePasswordToken = uuid()
       // Create new user instance
