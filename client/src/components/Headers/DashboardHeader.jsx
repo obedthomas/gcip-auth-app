@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 // reactstrap components
 import { Container, Row, Col } from 'reactstrap'
 import StatCard from '../StatCards/StatCard'
+import { getUsers } from './../../actions/users'
+import { getCompanies } from './../../actions/company'
 
-const DashboardHeader = () => {
+const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
+  useEffect(() => {
+    getUsers()
+    getCompanies()
+  }, [getUsers, getCompanies])
+
   return (
     <React.Fragment>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -13,18 +22,18 @@ const DashboardHeader = () => {
             <Row>
               <Col lg="6" xl="3">
                 <StatCard
-                  title="Total Users"
-                  stat={8}
+                  title="Users"
+                  stat={!users.loading ? users.users.length : 0}
                   icon="address-card"
-                  color="bg-danger"
+                  color="bg-success"
                 />
               </Col>
               <Col lg="6" xl="3">
                 <StatCard
-                  title="Total Users"
-                  stat={8}
-                  icon="address-card"
-                  color="bg-danger"
+                  title="Companies"
+                  stat={!companies.loading ? companies.companies.length : 0}
+                  icon="building"
+                  color="bg-primary"
                 />
               </Col>
               <Col lg="6" xl="3">
@@ -51,4 +60,17 @@ const DashboardHeader = () => {
   )
 }
 
-export default DashboardHeader
+DashboardHeader.propTypes = {
+  users: PropTypes.object.isRequired,
+  companies: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = state => ({
+  users: state.users,
+  companies: state.company,
+})
+
+export default connect(
+  mapStateToProps,
+  { getUsers, getCompanies }
+)(DashboardHeader)

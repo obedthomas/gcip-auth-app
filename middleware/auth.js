@@ -22,8 +22,8 @@ module.exports = role => {
       // check if role requirment is correct
       if (
         role === 'all' ||
-        req.user.role === 'admin' ||
-        req.user.role === role
+        req.user.role.toLowerCase() === 'admin' ||
+        req.user.role.toLowerCase() === role
       ) {
         next()
       } else {

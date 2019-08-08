@@ -17,7 +17,8 @@ import { getCompanies } from './../actions/company'
 const AddUser = ({ history, setAlert, register, companies, getCompanies }) => {
   useEffect(() => {
     getCompanies()
-  }, [])
+  }, [getCompanies])
+
   const [formData, setFormData] = useState({
     firstName: '',
     firstNameCheck: null,
@@ -114,7 +115,7 @@ const AddUser = ({ history, setAlert, register, companies, getCompanies }) => {
           <FormCard
             title={'Add New User'}
             btnText="Back"
-            onClick={history.goBack}
+            action={history.goBack}
           >
             <Form onSubmit={onSubmit}>
               {/* form section */}

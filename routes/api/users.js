@@ -2,8 +2,6 @@ const router = require('express').Router()
 const { check, validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
 const uuid = require('uuid/v4')
-const jwt = require('jsonwebtoken')
-const config = require('config')
 const auth = require('../../middleware/auth')
 const sendEmail = require('../../utils/sendEmail')
 // Models
@@ -16,8 +14,10 @@ const Company = require('../../models/Company')
 // @access  :   PRIVATE
 router.get('/', auth('all'), async (req, res) => {
   try {
-    const users = await User.find().select('-password')
-    res.json({ users })
+    const users = await User.find()
+      .populate('company', 'name -_id')
+      .select('-password')
+    res.json(users)
   } catch (err) {
     console.error(err.message)
     return res.status(500).send('Server Error')
@@ -145,6 +145,69 @@ router.delete('/:id', auth('admin'), async (req, res) => {
       : res.status(500).send('Server Error')
   }
 })
+
+// @type    :   PUT
+// @route   :   api/user/:id
+// @desc    :   Update user details
+// @access  :   PRIVATE/admin
+router.put(
+  '/:id',
+  [
+    auth('admin'),
+    // Validation
+    check('firstName', 'First name is required')
+      .not()
+      .isEmpty(),
+    check('lastName', 'Last name is required')
+      .not()
+      .isEmpty(),
+    check('role', 'Role is required')
+      .not()
+      .isEmpty(),
+    check('department', 'Department is required')
+      .not()
+      .isEmpty(),
+    check('company', 'Company is required')
+      .not()
+      .isEmpty(),
+    check('email', 'Please include a valid email').isEmail(),
+  ],
+  async (req, res) => {
+    // Handle req params to see if information is valid
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+    // if no errors
+    try {
+      const user = await User.findById(req.params.id)
+      if (!user) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'User does not exist' }] })
+      }
+      // if user exists
+      const { firstName, lastName, email, company, department, role } = req.body
+      user.firstName = firstName
+      user.lastName = lastName
+      user.email = email
+      user.company = company
+      user.department = department
+      user.role = role
+
+      // save user
+      await user.save()
+      return res.json({ msg: 'User has been modified' })
+    } catch (err) {
+      if (err.message.includes('E11000')) {
+        return res.json({ errors: [{ msg: 'Email has already been taken' }] })
+      }
+      return err.kind === 'ObjectId'
+        ? res.status(404).json({ errors: [{ msg: 'User not found' }] })
+        : res.status(500).send('Server Error')
+    }
+  }
+)
 
 // @type    :   PUT
 // @route   :   api/user/activate/:changePasswordToken

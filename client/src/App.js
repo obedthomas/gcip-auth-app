@@ -15,6 +15,7 @@ import './assets/vendor/select2/dist/css/select2.min.css'
 import './assets/vendor/quill/dist/quill.core.css'
 import './assets/vendor/nucleo/css/nucleo.css'
 import './assets/vendor/@fortawesome/fontawesome-free/css/all.min.css'
+import 'react-bootstrap-table2-filter/dist/react-bootstrap-table2-filter.min.css'
 // core styles
 import './assets/scss/argon-dashboard-pro-react.scss?v1.0.0'
 

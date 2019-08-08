@@ -2,11 +2,13 @@ import React from 'react'
 
 import TableRow from './TableRow'
 
-const TableBody = () => {
+const TableBody = ({ users }) => {
   return (
     <tbody>
       {/* map over each table row here */}
-      <TableRow />
+      {users.map(user => (
+        <TableRow />
+      ))}
     </tbody>
   )
 }

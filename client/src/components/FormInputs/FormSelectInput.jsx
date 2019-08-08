@@ -20,6 +20,7 @@ const FormSelectInput = ({
   required,
   valid,
   type,
+  disabled,
 }) => {
   // adds feedback icon if field has been blurred and props.valid is true
   const validationIcon = () => {
@@ -71,6 +72,7 @@ const FormSelectInput = ({
           name={name}
           value={value}
           onChange={e => onChange(e, required, type)}
+          disabled={disabled}
         >
           <option></option>
           {renderOptions()}

@@ -3,7 +3,14 @@ import PropTypes from 'prop-types'
 // reactstrap components
 import { Button, Card, CardHeader, CardBody, Row, Col } from 'reactstrap'
 
-const FormCard = ({ title, children, btnText, onClick }) => {
+const FormCard = ({
+  title,
+  children,
+  btnText,
+  onClick,
+  secondBtnText,
+  secondBtnState,
+}) => {
   return (
     <Card className="bg-secondary shadow">
       {/* Header */}
@@ -13,8 +20,12 @@ const FormCard = ({ title, children, btnText, onClick }) => {
             <h3 className="mb-0">{title}</h3>
           </Col>
           <Col className="text-right" xs="4">
-            <Button color="primary" onClick={e => onClick(e)} size="sm">
-              {btnText}
+            <Button
+              color={!secondBtnState ? 'primary' : 'success'}
+              onClick={e => onClick(e)}
+              size="sm"
+            >
+              {!secondBtnState ? btnText : secondBtnText}
             </Button>
           </Col>
         </Row>

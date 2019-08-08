@@ -24,7 +24,11 @@ class PublicLayout extends Component {
       if (route.layout === '/public') {
         return (
           <Route
-            path={route.layout + route.path}
+            path={
+              route.layout +
+              route.path +
+              (route.path === '/register' ? '/:token' : '')
+            }
             component={route.component}
             key={key}
           />
