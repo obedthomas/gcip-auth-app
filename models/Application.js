@@ -16,7 +16,14 @@ const ApplicationSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
-      users: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+      users: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'user',
+        },
+      ],
+      read: { type: Boolean, required: true },
+      write: { type: Boolean, required: true },
     },
   ],
   comments: {
