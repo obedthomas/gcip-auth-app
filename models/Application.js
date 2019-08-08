@@ -22,8 +22,6 @@ const ApplicationSchema = new mongoose.Schema({
           ref: 'user',
         },
       ],
-      read: { type: Boolean, required: true },
-      write: { type: Boolean, required: true },
     },
   ],
   comments: {
