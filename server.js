@@ -26,6 +26,7 @@ app.get('/api/', (req, res) => {
 app.use('/api/auth', require('./routes/api/auth'))
 app.use('/api/user', require('./routes/api/users'))
 app.use('/api/company', require('./routes/api/company'))
+app.use('/api/application', require('./routes/api/application'))
 
 // Listen to PORT
 app.listen(PORT, () => console.log(`Sever started on port: ${PORT}`))
