@@ -9,8 +9,8 @@ import { getCompanies } from './../../actions/company'
 
 const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
   useEffect(() => {
-    getUsers()
-    getCompanies()
+    if (!users.users) getUsers()
+    if (!companies.companies) getCompanies()
   }, [getUsers, getCompanies])
 
   return (

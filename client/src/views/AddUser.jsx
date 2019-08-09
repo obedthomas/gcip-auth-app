@@ -11,12 +11,13 @@ import FormSelectInput from './../components/FormInputs/FormSelectInput'
 import passGenerator from './../utils/passGenerator'
 // redux
 import { register } from '../actions/auth'
-import { setAlert } from './../actions/alert'
 import { getCompanies } from './../actions/company'
 
-const AddUser = ({ history, setAlert, register, companies, getCompanies }) => {
+const AddUser = ({ history, register, companies, getCompanies }) => {
   useEffect(() => {
-    getCompanies()
+    console.log(companies)
+
+    if (companies.loading) getCompanies()
   }, [getCompanies])
 
   const [formData, setFormData] = useState({
@@ -115,7 +116,7 @@ const AddUser = ({ history, setAlert, register, companies, getCompanies }) => {
           <FormCard
             title={'Add New User'}
             btnText="Back"
-            action={history.goBack}
+            onClick={history.goBack}
           >
             <Form onSubmit={onSubmit}>
               {/* form section */}
@@ -184,7 +185,7 @@ const AddUser = ({ history, setAlert, register, companies, getCompanies }) => {
                       valid={companyCheck}
                       onChange={onChange}
                       label="Company"
-                      options={companies}
+                      options={companies.companies}
                       required
                     />
                   </Col>
@@ -229,13 +230,15 @@ const AddUser = ({ history, setAlert, register, companies, getCompanies }) => {
 
 AddUser.propTypes = {
   register: PropTypes.func.isRequired,
+  getCompanies: PropTypes.func.isRequired,
+  companies: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-  companies: state.company.companies,
+  companies: state.company,
 })
 
 export default connect(
   mapStateToProps,
-  { register, setAlert, getCompanies }
+  { register, getCompanies }
 )(AddUser)

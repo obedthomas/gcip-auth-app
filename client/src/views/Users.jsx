@@ -28,8 +28,8 @@ const override = css`
 
 class Users extends Component {
   componentWillMount() {
-    if (!this.props.companies) this.props.getCompanies()
-    if (!this.props.users) this.props.getUsers()
+    this.props.getCompanies()
+    this.props.getUsers()
   }
 
   render() {
