@@ -2,18 +2,34 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { ScaleLoader } from 'react-spinners'
+import { css } from '@emotion/core'
 // reactstrap components
-import { Card, CardHeader, Container, Row, Col, Button } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Container,
+  Row,
+  Col,
+  Button,
+} from 'reactstrap'
 // core components
 import DashboardHeader from '../components/Headers/DashboardHeader'
 import { getUsers } from './../actions/users'
 import { getCompanies } from './../actions/company'
 import ReactBSTables from '../components/Tables/BSTable'
 
+//MoonLoader css
+const override = css`
+  display: block;
+  margin: 4rem auto;
+`
+
 class Users extends Component {
   componentWillMount() {
-    this.props.getCompanies()
-    this.props.getUsers()
+    if (!this.props.companies) this.props.getCompanies()
+    if (!this.props.users) this.props.getUsers()
   }
 
   render() {
@@ -49,8 +65,14 @@ class Users extends Component {
                     </Col>
                   </Row>
                 </CardHeader>
-                {/* add loading spinner here */}
-                {!users.loading && (
+                {users.loading ? (
+                  <ScaleLoader
+                    css={override}
+                    sizeUnit={'px'}
+                    size={60}
+                    color={'#11cdef'}
+                  />
+                ) : (
                   <ReactBSTables data={users.users} columns={columns} />
                 )}
               </Card>
