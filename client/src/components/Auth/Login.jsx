@@ -36,7 +36,7 @@ const Login = ({ isAuthenticated, login, history }) => {
           <div className="text-center text-muted mb-4">
             <small>Sign in with credentials</small>
           </div>
-          <Form role="form" onSubmit={onSubmit}>
+          <Form role="form" onSubmit={e => onSubmit(e)}>
             <FormInput
               placeholder="Work Email"
               type="email"
