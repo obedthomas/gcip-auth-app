@@ -65,4 +65,188 @@ router.post(
   }
 )
 
+// @type    :   PUT
+// @route   :   api/application/:id
+// @desc    :   Edit name and comments of application
+// @access  :   PRIVATE/admin
+router.put(
+  '/:id',
+  [
+    auth('admin'),
+    [
+      // Validation
+      check('name', 'Name of application is required')
+        .not()
+        .isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    // Handle req params to see if information is valid
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+
+    try {
+      // if no errors
+      const { name, comments } = req.body
+      // check if application exists
+      let app = await App.findById(req.params.id)
+      if (!app) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Application does not exist' }] })
+      }
+      // if app exists
+      // check if name already exists
+      const isMatch = await App.findOne({ name })
+      if (isMatch) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Application name already taken' }] })
+      }
+      // if name does not exist
+      app.name = name
+      app.comments = comments
+      // save new app
+      await app.save()
+      // return
+      return res.json({ msg: 'Application has been edited' })
+    } catch (err) {
+      console.error(err.message)
+      return err.kind === 'ObjectId'
+        ? res.status(404).json({ errors: [{ msg: 'Application not found' }] })
+        : res.status(500).send('Server Error')
+    }
+  }
+)
+
+// @type    :   POST
+// @route   :   api/application/:id/permissions
+// @desc    :   Add permissions to an application
+// @access  :   PRIVATE/admin
+router.post(
+  '/:id/permissions',
+  [
+    auth('admin'),
+    [
+      // Validation
+      check('name', 'Name of permission is required')
+        .not()
+        .isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    // Handle req params to see if information is valid
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+    // if no errors
+    try {
+      // check if application exists
+      let app = await App.findById(req.params.id)
+      if (!app) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Application does not exist' }] })
+      }
+      // if app exists
+      const { name, users } = req.body
+      // check is permission name exists
+      const isMatch = await App.findOne({ 'permissions.name': name })
+      if (isMatch) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Permission name already taken' }] })
+      }
+      // if name does not exist
+      // validate all user ids
+      let userErrors = []
+      let validatedUsers = []
+      for (const user of users) {
+        const r = await User.findById(user)
+        r
+          ? validatedUsers.push(r._id)
+          : userErrors.push({ msg: 'User not found', id: user })
+      }
+      // check if any users were not found
+      if (userErrors.length > 0) {
+        return res.status(400).json({ errors: userErrors })
+      }
+      // if all users are valid
+      // add permission to app
+      await app.permissions.push({ name, users: validatedUsers })
+      await app.save()
+      return res.json({ msg: 'Permissions Added' })
+    } catch (err) {
+      console.error(err.message)
+      return err.kind === 'ObjectId'
+        ? res.status(404).json({ errors: [{ msg: 'Application not found' }] })
+        : res.status(500).send('Server Error')
+    }
+  }
+)
+
+// @type    :   PUT
+// @route   :   api/application/:id/permissions/:permissionId
+// @desc    :   Edit permissions to an application
+// @access  :   PRIVATE/admin
+router.put(
+  '/:id/permissions/:permissionId',
+  [
+    auth('admin'),
+    [
+      // Validation
+      check('name', 'Name of permission is required')
+        .not()
+        .isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    // Handle req params to see if information is valid
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+    // if no errors
+    try {
+      const app = await App.findById(req.params.id)
+      // if no app
+      if (!app) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Application does not exist' }] })
+      }
+      // if app exists
+      const { name, users } = req.body
+      const { id, permissionId } = req.params
+      const data = await App.findOneAndUpdate(
+        {
+          _id: id,
+          'permissions._id': permissionId,
+        },
+        {
+          $set: { 'permissions.$.name': name, 'permissions.$.users': users },
+        },
+        {
+          select: {
+            permissions: {
+              $elemMatch: { _id: permissionId },
+            },
+          },
+        }
+      )
+      if (!data.toString().includes('Cast to ObjectId failed')) {
+        return res.json({ msg: 'Permission has been updated' })
+      }
+    } catch (err) {
+      console.error(err.message)
+      return err.kind === 'ObjectId'
+        ? res.status(404).json({ errors: [{ msg: 'Incorrect ID' }] })
+        : res.status(500).send('Server Error')
+    }
+  }
+)
+
 module.exports = router
