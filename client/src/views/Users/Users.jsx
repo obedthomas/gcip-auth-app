@@ -15,10 +15,10 @@ import {
   Button,
 } from 'reactstrap'
 // core components
-import DashboardHeader from '../components/Headers/DashboardHeader'
-import { getUsers } from './../actions/users'
-import { getCompanies } from './../actions/company'
-import ReactBSTables from '../components/Tables/BSTable'
+import DashboardHeader from '../../components/Headers/DashboardHeader'
+import { getUsers } from '../../actions/users'
+import { getCompanies } from '../../actions/company'
+import ReactBSTables from '../../components/Tables/BSTable'
 
 //MoonLoader css
 const override = css`

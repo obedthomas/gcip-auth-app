@@ -4,14 +4,14 @@ import { connect } from 'react-redux'
 // reactstrap components
 import { Container, Row, Col, Form, Button } from 'reactstrap'
 // core componentsw
-import DashboardHeader from '../components/Headers/DashboardHeader'
-import FormCard from '../components/FormInputs/FormCard'
-import FormInput from '../components/FormInputs/FormInput'
-import FormSelectInput from './../components/FormInputs/FormSelectInput'
-import passGenerator from './../utils/passGenerator'
+import DashboardHeader from '../../components/Headers/DashboardHeader'
+import FormCard from '../../components/FormInputs/FormCard'
+import FormInput from '../../components/FormInputs/FormInput'
+import FormSelectInput from '../../components/FormInputs/FormSelectInput'
+import passGenerator from '../../utils/passGenerator'
 // redux
-import { register } from '../actions/auth'
-import { getCompanies } from './../actions/company'
+import { register } from '../../actions/auth'
+import { getCompanies } from '../../actions/company'
 
 const AddUser = ({ history, register, companies, getCompanies }) => {
   useEffect(() => {
