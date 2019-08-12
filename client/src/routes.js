@@ -2,7 +2,6 @@ import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 import Profile from './views/Profile'
 import Users from './views/Users/Users'
-import AddUser from './views/Users/AddUser'
 
 const routes = [
   {
@@ -53,16 +52,6 @@ const routes = [
     layout: '/admin',
     state: 'usersCollapse',
     hide: false,
-    exact: false,
-  },
-  {
-    path: '/users/add-user',
-    name: 'Add User',
-    icon: 'ni ni-fat-add text-primary',
-    component: AddUser,
-    layout: '/admin',
-    state: 'addUsersCollapse',
-    hide: true,
     exact: false,
   },
 ]

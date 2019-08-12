@@ -110,7 +110,6 @@ const AddUser = ({ history, register, companies, getCompanies }) => {
 
   return (
     <React.Fragment>
-      <DashboardHeader />
       <Container className="mt--7" fluid>
         <Col className="order-xl-1 px-0" xl="12">
           <FormCard

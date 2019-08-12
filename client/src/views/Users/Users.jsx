@@ -1,30 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { ScaleLoader } from 'react-spinners'
-import { css } from '@emotion/core'
-// reactstrap components
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Container,
-  Row,
-  Col,
-  Button,
-} from 'reactstrap'
 // core components
 import DashboardHeader from '../../components/Headers/DashboardHeader'
 import { getUsers } from '../../actions/users'
 import { getCompanies } from '../../actions/company'
-import ReactBSTables from '../../components/Tables/BSTable'
-
-//MoonLoader css
-const override = css`
-  display: block;
-  margin: 4rem auto;
-`
+import AllUsers from './AllUsers'
+import AddUser from './AddUser'
 
 class Users extends Component {
   componentWillMount() {
@@ -33,58 +16,22 @@ class Users extends Component {
   }
 
   render() {
-    const { users } = this.props
-
-    const columns = [
-      { dataField: 'firstName', text: 'First Name', sort: true },
-      { dataField: 'lastName', text: 'Last Name', sort: true },
-      { dataField: 'company', text: 'Company', sort: true },
-      { dataField: 'department', text: 'department', sort: true },
-      { dataField: 'role', text: 'role', sort: true },
-      {
-        dataField: 'edit',
-        text: '',
-        isDummyField: true,
-        headerStyle: { width: '100px' },
-        sort: false,
-      },
-    ]
-
+    const { users, companies } = this.props
     return (
       <React.Fragment>
         <DashboardHeader />
-        <Container className="mt--7" fluid>
-          <Row>
-            <div className="col">
-              <Card className="shadow">
-                <CardHeader className="border-0">
-                  <Row className="align-items-center">
-                    <Col xs="8">
-                      <h3 className="mb-0">All Users</h3>
-                    </Col>
-                    <Col className="text-right" xs="4">
-                      <Link to="/admin/users/add-user" className="text-white">
-                        <Button color="primary" size="sm">
-                          Add
-                        </Button>
-                      </Link>
-                    </Col>
-                  </Row>
-                </CardHeader>
-                {users.loading ? (
-                  <ScaleLoader
-                    css={override}
-                    sizeUnit={'px'}
-                    size={60}
-                    color={'#11cdef'}
-                  />
-                ) : (
-                  <ReactBSTables data={users.users} columns={columns} />
-                )}
-              </Card>
-            </div>
-          </Row>
-        </Container>
+        <Switch>
+          <Route
+            path="/admin/users/add-user"
+            render={props => <AddUser {...props} />}
+          />
+          <Route
+            path="/"
+            render={props => (
+              <AllUsers {...props} users={users} companies={companies} />
+            )}
+          />
+        </Switch>
       </React.Fragment>
     )
   }
