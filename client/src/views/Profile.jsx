@@ -38,8 +38,8 @@ const Profile = ({ user, getCompanies, companies, setAlert, editUser }) => {
   const { edit } = editState
 
   useEffect(() => {
-    getCompanies()
-  }, [getCompanies])
+    if (companies.loading) getCompanies()
+  }, [getCompanies, companies])
 
   const deptOptions = [
     { name: 'Payroll' },

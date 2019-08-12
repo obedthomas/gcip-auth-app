@@ -2,6 +2,7 @@ import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 import Profile from './views/Profile'
 import Users from './views/Users/Users'
+import Companies from './views/Companies/Companies'
 
 const routes = [
   {
@@ -46,7 +47,7 @@ const routes = [
     path: '/companies',
     name: 'Companies',
     icon: 'ni ni-building text-warning',
-    component: Users,
+    component: Companies,
     layout: '/admin',
     hide: false,
     exact: false,
