@@ -1,8 +1,6 @@
 import React from 'react'
 // react component used to create sweet alerts
 import ReactBSAlert from 'react-bootstrap-sweetalert'
-// reactstrap components
-import { Button } from 'reactstrap'
 
 const ConfirmAlert = ({ text, onConfirm, onCancel }) => {
   return (

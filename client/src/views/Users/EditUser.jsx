@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
 // reactstrap components
 import {
   FormGroup,
@@ -35,7 +34,6 @@ const EditUser = ({ history, location, companies, setAlert, editUser }) => {
     department,
     email,
     company,
-    companyCheck,
     roleCheck,
     departmentCheck,
   } = formData

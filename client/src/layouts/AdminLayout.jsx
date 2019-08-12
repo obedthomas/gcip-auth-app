@@ -9,8 +9,6 @@ import routes from '../routes.js'
 import AdminNavbar from '../components/Navbars/AdminNavbar'
 import AdminFooter from './../components/Footers/AdminFooter'
 import AdminSidebar from '../components/Sidebar/AdminSidebar.jsx'
-import Profile from '../views/Profile.jsx'
-import Users from '../views/Users/Users.jsx'
 // reactstrap components
 import { Container } from 'reactstrap'
 

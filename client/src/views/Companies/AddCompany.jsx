@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 // reactstrap components
 import { Container, Row, Col, Form, Button } from 'reactstrap'
-// core componentsw
+// core components
 import FormCard from '../../components/FormInputs/FormCard'
 import FormInput from '../../components/FormInputs/FormInput'
-import FormSelectInput from '../../components/FormInputs/FormSelectInput'
 import { addCompany } from '../../actions/company'
 
 const AddCompany = ({ history, addCompany }) => {

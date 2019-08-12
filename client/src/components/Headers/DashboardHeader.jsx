@@ -11,7 +11,7 @@ const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
   useEffect(() => {
     if (!users.users) getUsers()
     if (!companies.companies) getCompanies()
-  }, [getUsers, getCompanies])
+  }, [getUsers, getCompanies, users, companies])
 
   return (
     <React.Fragment>
