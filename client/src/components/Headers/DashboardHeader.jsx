@@ -33,7 +33,15 @@ const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
                   title="Companies"
                   stat={!companies.loading ? companies.companies.length : 0}
                   icon="building"
-                  color="bg-primary"
+                  color="bg-warning"
+                />
+              </Col>
+              <Col lg="6" xl="3">
+                <StatCard
+                  title="Companies"
+                  stat={8}
+                  icon="address-card"
+                  color="bg-warning"
                 />
               </Col>
               <Col lg="6" xl="3">
@@ -41,15 +49,7 @@ const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
                   title="Total Users"
                   stat={8}
                   icon="address-card"
-                  color="bg-danger"
-                />
-              </Col>
-              <Col lg="6" xl="3">
-                <StatCard
-                  title="Total Users"
-                  stat={8}
-                  icon="address-card"
-                  color="bg-danger"
+                  color="bg-info"
                 />
               </Col>
             </Row>
