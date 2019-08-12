@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 // reactstrap components
 import { Container, Row, Col, Form, Button } from 'reactstrap'
 // core componentsw
-import DashboardHeader from '../../components/Headers/DashboardHeader'
 import FormCard from '../../components/FormInputs/FormCard'
 import FormInput from '../../components/FormInputs/FormInput'
 import FormSelectInput from '../../components/FormInputs/FormSelectInput'
@@ -15,10 +14,8 @@ import { getCompanies } from '../../actions/company'
 
 const AddUser = ({ history, register, companies, getCompanies }) => {
   useEffect(() => {
-    console.log(companies)
-
     if (companies.loading) getCompanies()
-  }, [getCompanies])
+  }, [getCompanies, companies])
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -233,11 +230,7 @@ AddUser.propTypes = {
   companies: PropTypes.object.isRequired,
 }
 
-const mapStateToProps = state => ({
-  companies: state.company,
-})
-
 export default connect(
-  mapStateToProps,
+  null,
   { register, getCompanies }
 )(AddUser)

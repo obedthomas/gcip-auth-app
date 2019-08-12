@@ -16,20 +16,18 @@ class Users extends Component {
   }
 
   render() {
-    const { users, companies } = this.props
+    const { users, companies, auth } = this.props
     return (
       <React.Fragment>
         <DashboardHeader />
         <Switch>
           <Route
             path="/admin/users/add-user"
-            render={props => <AddUser {...props} />}
+            render={props => <AddUser {...props} companies={companies} />}
           />
           <Route
             path="/"
-            render={props => (
-              <AllUsers {...props} users={users} companies={companies} />
-            )}
+            render={props => <AllUsers {...props} users={users} auth={auth} />}
           />
         </Switch>
       </React.Fragment>
@@ -45,11 +43,13 @@ Users.propTypes = {
   users: PropTypes.object.isRequired,
   getCompanies: PropTypes.func.isRequired,
   getUsers: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
   users: state.users,
-  companies: state.company.companies,
+  companies: state.company,
+  auth: state.auth.user,
 })
 
 export default connect(

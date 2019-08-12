@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ReactBSTables from '../../components/Tables/BSTable'
 import { ScaleLoader } from 'react-spinners'
@@ -12,14 +13,75 @@ import {
   Row,
   Col,
   Button,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from 'reactstrap'
+import { setAlert } from '../../actions/alert'
+import ConfirmAlert from '../../components/Alerts/ConfirmAlert'
+
 //MoonLoader css
 const override = css`
   display: block;
   margin: 4rem auto;
 `
 
-const AllUsers = ({ users, companies }) => {
+const AllUsers = ({ users, auth, setAlert }) => {
+  const [alerts, setAlerts] = useState({
+    alert: false,
+    id: '',
+  })
+
+  const onConfirm = () => {
+    // make delete call to api
+    // reset alert state
+    return setAlerts({ alert: false, id: '' })
+  }
+
+  const onCancel = () => {
+    // return alert state
+    return setAlerts({ alert: false, id: '' })
+  }
+
+  const confirmDelete = id => {
+    // check if id matches the current user
+    if (id === auth._id)
+      return setAlert(
+        'You must delete your own account on the profile page',
+        'danger'
+      )
+    //open confirmation modal
+    return setAlerts({ alert: true, id })
+  }
+
+  const actionFormater = (cell, row, rowIndex) => {
+    return (
+      <UncontrolledDropdown>
+        <DropdownToggle
+          className="btn-icon-only text-light"
+          color=""
+          role="button"
+          size="sm"
+        >
+          <i className="fas fa-ellipsis-v" />
+        </DropdownToggle>
+        <DropdownMenu className="dropdown-menu-arrow" right>
+          <DropdownItem onClick={e => e.preventDefault()}>
+            <span className="text-primary">
+              <i className="fa fa-edit mr-2"></i> Edit
+            </span>
+          </DropdownItem>
+          <DropdownItem onClick={() => confirmDelete(row._id)}>
+            <span className="text-danger">
+              <i className="fa fa-trash mr-2"></i> Delete
+            </span>
+          </DropdownItem>
+        </DropdownMenu>
+      </UncontrolledDropdown>
+    )
+  }
+
   const columns = [
     { dataField: 'firstName', text: 'First Name', sort: true },
     { dataField: 'lastName', text: 'Last Name', sort: true },
@@ -29,6 +91,7 @@ const AllUsers = ({ users, companies }) => {
     {
       dataField: 'edit',
       text: '',
+      formatter: actionFormater,
       isDummyField: true,
       headerStyle: { width: '100px' },
       sort: false,
@@ -37,6 +100,14 @@ const AllUsers = ({ users, companies }) => {
 
   return (
     <Container className="mt--7" fluid>
+      {alerts.alert && (
+        <ConfirmAlert
+          text="Are you sure you want to delete this user?"
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+        />
+      )}
+
       <Row>
         <div className="col">
           <Card className="shadow">
@@ -71,4 +142,7 @@ const AllUsers = ({ users, companies }) => {
   )
 }
 
-export default AllUsers
+export default connect(
+  null,
+  { setAlert }
+)(AllUsers)
