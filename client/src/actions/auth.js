@@ -9,6 +9,7 @@ import {
 import { setAlert } from './alert'
 import { setLoader } from './loading'
 import setAuthToken from './../utils/setAuthToken'
+import { getUsers } from './users'
 
 // Login user
 export const login = (email, password) => async dispatch => {
@@ -102,7 +103,7 @@ export const activate = (data, push) => async dispatch => {
 }
 
 // Edit user
-export const editUser = (data, id, isMine) => async dispatch => {
+export const editUser = (data, id, isMine, history) => async dispatch => {
   // isMine is a bool value to determine if we are editing the logged in user's details
   // or the details of another user
   const { firstName, lastName, email, company, department, role } = data
@@ -124,6 +125,10 @@ export const editUser = (data, id, isMine) => async dispatch => {
     isMine && dispatch(loadUser())
     dispatch(setLoader(false))
     dispatch(setAlert('User has been updated', 'success'))
+    if (!isMine) {
+      dispatch(getUsers())
+      history.push('/admin/users')
+    }
   } catch (err) {
     // handle error sent by API
     const errors = err.response.data.errors

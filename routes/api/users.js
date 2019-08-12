@@ -15,9 +15,25 @@ const Company = require('../../models/Company')
 router.get('/', auth('all'), async (req, res) => {
   try {
     const users = await User.find()
-      .populate('company', 'name -_id')
+      .populate('company', 'name _id')
       .select('-password')
     res.json(users)
+  } catch (err) {
+    console.error(err.message)
+    return res.status(500).send('Server Error')
+  }
+})
+
+// @type    :   GET
+// @route   :   api/user/:id
+// @desc    :   Get an array of all users
+// @access  :   PRIVATE
+router.get('/:id', auth('all'), async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .populate('company', 'name _id')
+      .select('-password -changePasswordToken')
+    res.json(user)
   } catch (err) {
     console.error(err.message)
     return res.status(500).send('Server Error')
@@ -199,6 +215,7 @@ router.put(
       await user.save()
       return res.json({ msg: 'User has been modified' })
     } catch (err) {
+      console.error(err)
       if (err.message.includes('E11000')) {
         return res.json({ errors: [{ msg: 'Email has already been taken' }] })
       }

@@ -135,7 +135,7 @@ const Profile = ({ user, getCompanies, companies, setAlert, editUser }) => {
                     <FormSelectInput
                       name="company"
                       type="select"
-                      value={company}
+                      value={company._id}
                       valid={companyCheck}
                       onChange={onChange}
                       label="Company"

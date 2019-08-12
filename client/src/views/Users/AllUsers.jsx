@@ -8,7 +8,6 @@ import { css } from '@emotion/core'
 import {
   Card,
   CardHeader,
-  CardBody,
   Container,
   Row,
   Col,
@@ -20,6 +19,7 @@ import {
 } from 'reactstrap'
 import { setAlert } from '../../actions/alert'
 import ConfirmAlert from '../../components/Alerts/ConfirmAlert'
+import { deleteUser } from '../../actions/users'
 
 //MoonLoader css
 const override = css`
@@ -27,14 +27,22 @@ const override = css`
   margin: 4rem auto;
 `
 
-const AllUsers = ({ users, auth, setAlert }) => {
+const AllUsers = ({ users, auth, setAlert, deleteUser, history }) => {
   const [alerts, setAlerts] = useState({
     alert: false,
     id: '',
   })
 
+  const editUser = user => {
+    return history.push({
+      pathname: '/admin/users/edit-user',
+      state: { user },
+    })
+  }
+
   const onConfirm = () => {
     // make delete call to api
+    if (alerts.id) deleteUser(alerts.id)
     // reset alert state
     return setAlerts({ alert: false, id: '' })
   }
@@ -67,7 +75,7 @@ const AllUsers = ({ users, auth, setAlert }) => {
           <i className="fas fa-ellipsis-v" />
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-arrow" right>
-          <DropdownItem onClick={e => e.preventDefault()}>
+          <DropdownItem onClick={() => editUser(row)}>
             <span className="text-primary">
               <i className="fa fa-edit mr-2"></i> Edit
             </span>
@@ -107,7 +115,6 @@ const AllUsers = ({ users, auth, setAlert }) => {
           onCancel={onCancel}
         />
       )}
-
       <Row>
         <div className="col">
           <Card className="shadow">
@@ -144,5 +151,5 @@ const AllUsers = ({ users, auth, setAlert }) => {
 
 export default connect(
   null,
-  { setAlert }
+  { setAlert, deleteUser }
 )(AllUsers)

@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-// core components
-import DashboardHeader from '../../components/Headers/DashboardHeader'
 import { getUsers } from '../../actions/users'
 import { getCompanies } from '../../actions/company'
+// core components
+import DashboardHeader from '../../components/Headers/DashboardHeader'
 import AllUsers from './AllUsers'
 import AddUser from './AddUser'
+import EditUser from './EditUser'
 
 class Users extends Component {
   componentWillMount() {
@@ -24,6 +25,10 @@ class Users extends Component {
           <Route
             path="/admin/users/add-user"
             render={props => <AddUser {...props} companies={companies} />}
+          />
+          <Route
+            path="/admin/users/edit-user"
+            render={props => <EditUser {...props} companies={companies} />}
           />
           <Route
             path="/"
