@@ -110,7 +110,7 @@ const AllUsers = ({ users, auth, setAlert, deleteUser, history }) => {
     <Container className="mt--7" fluid>
       {alerts.alert && (
         <ConfirmAlert
-          text="Are you sure you want to delete this user?"
+          text="Are you sure you want to delete this company?"
           onConfirm={onConfirm}
           onCancel={onCancel}
         />

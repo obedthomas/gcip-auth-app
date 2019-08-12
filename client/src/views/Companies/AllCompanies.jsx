@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import ReactBSTables from '../../components/Tables/BSTable'
 import { ScaleLoader } from 'react-spinners'
 import { css } from '@emotion/core'
+import ConfirmAlert from './../../components/Alerts/ConfirmAlert'
+import { deleteCompany } from './../../actions/company'
 // reactstrap components
 import {
   Card,
@@ -25,7 +27,31 @@ const override = css`
   margin: 4rem auto;
 `
 
-const AllCompanies = ({ companies }) => {
+const AllCompanies = ({ companies, deleteCompany }) => {
+  console.log()
+
+  const [alerts, setAlerts] = useState({
+    alert: false,
+    id: '',
+  })
+
+  const onConfirm = () => {
+    // make delete call to api
+    if (alerts.id) deleteCompany(alerts.id)
+    // reset alert state
+    return setAlerts({ alert: false, id: '' })
+  }
+
+  const onCancel = () => {
+    // return alert state
+    return setAlerts({ alert: false, id: '' })
+  }
+
+  const confirmDelete = id => {
+    //open confirmation modal
+    return setAlerts({ alert: true, id })
+  }
+
   const actionFormater = (cell, row, rowIndex) => {
     return (
       <UncontrolledDropdown>
@@ -43,7 +69,7 @@ const AllCompanies = ({ companies }) => {
               <i className="fa fa-edit mr-2"></i> Edit
             </span>
           </DropdownItem>
-          <DropdownItem onClick={e => e.preventDefault()}>
+          <DropdownItem onClick={() => confirmDelete(row._id)}>
             <span className="text-danger">
               <i className="fa fa-trash mr-2"></i> Delete
             </span>
@@ -68,6 +94,13 @@ const AllCompanies = ({ companies }) => {
   return (
     <Container className="mt--7" fluid>
       {/* confirm alert */}
+      {alerts.alert && (
+        <ConfirmAlert
+          text="Are you sure you want to delete this user?"
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+        />
+      )}
       <Row>
         <div className="col">
           <Card className="shadow">
@@ -109,4 +142,7 @@ AllCompanies.propTypes = {
   companies: PropTypes.object.isRequired,
 }
 
-export default connect()(AllCompanies)
+export default connect(
+  null,
+  { deleteCompany }
+)(AllCompanies)

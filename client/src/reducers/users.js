@@ -9,8 +9,12 @@ export default (state = initialState, { type, payload }) => {
   switch (type) {
     case LOAD_USERS:
       payload.forEach(user => {
-        const striped = user.company.name
-        user.company = striped
+        if (user.company) {
+          const striped = user.company.name
+          user.company = striped
+        } else {
+          user.company = 'Deleted Company'
+        }
       })
       return { ...state, users: payload, loading: false }
 

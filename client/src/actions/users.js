@@ -12,6 +12,7 @@ export const getUsers = () => async dispatch => {
     })
   } catch (err) {
     // handle error sent by API
+    console.log(err)
     const errors = err.response.data.errors
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))

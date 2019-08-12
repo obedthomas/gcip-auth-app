@@ -6,6 +6,7 @@ import { getCompanies } from '../../actions/company'
 // core components
 import DashboardHeader from '../../components/Headers/DashboardHeader'
 import AllCompanies from './AllCompanies'
+import AddCompany from './AddCompany'
 
 const Companies = ({ companies, getCompanies, auth }) => {
   useEffect(() => {
@@ -16,6 +17,12 @@ const Companies = ({ companies, getCompanies, auth }) => {
     <React.Fragment>
       <DashboardHeader />
       <Switch>
+        <Route
+          path="/admin/companies/add-company"
+          render={props => (
+            <AddCompany {...props} getCompanies={getCompanies} />
+          )}
+        />
         <Route
           path="/"
           render={props => <AllCompanies {...props} companies={companies} />}
