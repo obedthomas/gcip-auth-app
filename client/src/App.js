@@ -25,7 +25,6 @@ import store from './store'
 import { loadUser } from './actions/auth'
 import Alerts from './components/Alerts/Alerts'
 import PrivateRoute from './utils/PrivateRoute'
-import PublicRoute from './utils/PublicRoute'
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
