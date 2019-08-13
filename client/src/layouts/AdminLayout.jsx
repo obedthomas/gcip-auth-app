@@ -5,6 +5,7 @@ import { PropTypes } from 'prop-types'
 import { css } from '@emotion/core'
 import { BarLoader } from 'react-spinners'
 import routes from '../routes.js'
+import { fetchStats } from './../actions/stats'
 // core components
 import AdminNavbar from '../components/Navbars/AdminNavbar'
 import AdminFooter from './../components/Footers/AdminFooter'
@@ -30,6 +31,8 @@ const AdminLayout = props => {
     auth: { isAuthenticated },
     user,
     loading,
+    fetchStats,
+    stats,
   } = props
 
   const [state, setState] = useState({
@@ -41,7 +44,13 @@ const AdminLayout = props => {
   useEffect(() => {
     document.documentElement.scrollTop = 0
     document.scrollingElement.scrollTop = 0
-  })
+    if (stats.loading) fetchStats()
+  }, [
+    document.documentElement.scrollTop,
+    document.scrollingElement.scrollTop,
+    stats,
+    fetchStats,
+  ])
 
   // dynamically renders all routes with '/admin/...'
   const getRoutes = routes => {
@@ -120,12 +129,19 @@ const AdminLayout = props => {
 AdminLayout.propTypes = {
   auth: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
+  user: PropTypes.object.isRequired,
+  fetchStats: PropTypes.func.isRequired,
+  stats: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
   auth: state.auth,
   user: state.auth.user,
   loading: state.loading.showLoader,
+  stats: state.stats,
 })
 
-export default connect(mapStateToProps)(AdminLayout)
+export default connect(
+  mapStateToProps,
+  { fetchStats }
+)(AdminLayout)

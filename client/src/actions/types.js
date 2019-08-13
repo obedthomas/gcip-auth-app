@@ -15,3 +15,5 @@ export const LOADING = 'LOADING'
 export const STOP_LOADING = 'STOP_LOADING'
 // USER MANAGEMENT
 export const LOAD_USERS = 'LOAD_USERS'
+// STATS
+export const FETCH_STATS = 'FETCH_STATS'

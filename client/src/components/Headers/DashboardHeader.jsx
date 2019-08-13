@@ -4,15 +4,8 @@ import { connect } from 'react-redux'
 // reactstrap components
 import { Container, Row, Col } from 'reactstrap'
 import StatCard from '../StatCards/StatCard'
-import { getUsers } from './../../actions/users'
-import { getCompanies } from './../../actions/company'
 
-const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
-  useEffect(() => {
-    if (!users.users) getUsers()
-    if (!companies.companies) getCompanies()
-  }, [getUsers, getCompanies, users, companies])
-
+const DashboardHeader = ({ stats }) => {
   return (
     <React.Fragment>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -23,7 +16,7 @@ const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
               <Col lg="6" xl="3">
                 <StatCard
                   title="Users"
-                  stat={!users.loading ? users.users.length : 0}
+                  stat={stats.loading ? 'Loading...' : stats.totals.userTotal}
                   icon="address-card"
                   color="bg-success"
                 />
@@ -31,17 +24,19 @@ const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
               <Col lg="6" xl="3">
                 <StatCard
                   title="Companies"
-                  stat={!companies.loading ? companies.companies.length : 0}
+                  stat={
+                    stats.loading ? 'Loading...' : stats.totals.companyTotal
+                  }
                   icon="building"
                   color="bg-warning"
                 />
               </Col>
               <Col lg="6" xl="3">
                 <StatCard
-                  title="Companies"
-                  stat={8}
-                  icon="address-card"
-                  color="bg-warning"
+                  title="Applications"
+                  stat={stats.loading ? 'Loading...' : stats.totals.appTotal}
+                  icon="desktop"
+                  color="bg-info"
                 />
               </Col>
               <Col lg="6" xl="3">
@@ -61,16 +56,11 @@ const DashboardHeader = ({ users, companies, getUsers, getCompanies }) => {
 }
 
 DashboardHeader.propTypes = {
-  users: PropTypes.object.isRequired,
-  companies: PropTypes.object.isRequired,
+  stats: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-  users: state.users,
-  companies: state.company,
+  stats: state.stats,
 })
 
-export default connect(
-  mapStateToProps,
-  { getUsers, getCompanies }
-)(DashboardHeader)
+export default connect(mapStateToProps)(DashboardHeader)
