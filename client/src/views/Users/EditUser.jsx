@@ -13,13 +13,12 @@ import {
   Form,
 } from 'reactstrap'
 // Core components
-import { setAlert } from './../../actions/alert'
 import { editUser } from './../../actions/auth'
 import FormInput from './../../components/FormInputs/FormInput'
 import FormSelectInput from './../../components/FormInputs/FormSelectInput'
 import FormCard from './../../components/FormInputs/FormCard'
 
-const EditUser = ({ history, location, companies, setAlert, editUser }) => {
+const EditUser = ({ history, location, companies, editUser }) => {
   const [formData, setFormData] = useState({
     ...location.state.user,
     companyCheck: '',
@@ -62,7 +61,7 @@ const EditUser = ({ history, location, companies, setAlert, editUser }) => {
     <Container className="mt--7" fluid>
       <Col>
         <FormCard
-          title={'My Profile'}
+          title={'Edit User'}
           btnText="Cancel"
           onClick={() => history.push('/admin/users')}
         >
@@ -108,16 +107,6 @@ const EditUser = ({ history, location, companies, setAlert, editUser }) => {
             <div className="pl-lg-4">
               <Row>
                 <Col lg="6">
-                  {/* <FormSelectInput
-                    name="company"
-                    type="select"
-                    value={company}
-                    valid={companyCheck}
-                    onChange={onChange}
-                    label="Company"
-                    options={companies.companies}
-                    required
-                  /> */}
                   <FormGroup>
                     <Row>
                       <label className="form-control-label" htmlFor="company">
@@ -181,5 +170,5 @@ const EditUser = ({ history, location, companies, setAlert, editUser }) => {
 
 export default connect(
   null,
-  { setAlert, editUser }
+  { editUser }
 )(EditUser)

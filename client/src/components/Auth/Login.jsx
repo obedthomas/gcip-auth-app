@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { login } from './../../actions/auth'
 import FormInput from './../FormInputs/FormInput'
+import { Redirect } from 'react-router-dom'
 
 // reactstrap components
 import { Button, Card, CardBody, Form, Row, Col } from 'reactstrap'
 
-const Login = ({ login, history }) => {
+const Login = ({ login, history, auth, location }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -22,7 +23,11 @@ const Login = ({ login, history }) => {
 
   const onSubmit = e => {
     e.preventDefault()
-    return login(email, password, history)
+    login(email, password, history)
+  }
+
+  if (auth.isAuthenticated) {
+    return <Redirect to="/admin/profile" />
   }
 
   return (
@@ -76,11 +81,11 @@ const Login = ({ login, history }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
+  auth: PropTypes.bool,
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth,
 })
 
 export default connect(

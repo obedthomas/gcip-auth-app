@@ -83,4 +83,55 @@ router.delete('/:id', auth('admin'), async (req, res) => {
   }
 })
 
+// @type    :   PUT
+// @route   :   api/company/:id
+// @desc    :   Edit a single company's details
+// @access  :   PRIVATE/admin
+router.put(
+  '/:id',
+  [
+    auth('admin'),
+    [
+      // Validation
+      check('name', 'Company Name is required')
+        .not()
+        .isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    // Handle req params to see if information is valid
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+    // if no errors
+    const { name } = req.body
+    try {
+      // see if company already exists
+      const isDupe = await Company.findOne({ name })
+      // handle duplicate entry
+      if (isDupe) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Company already exists' }] })
+      }
+
+      const company = await Company.findById(req.params.id)
+      if (!company) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Company does not exist' }] })
+      }
+
+      // add new entry
+      company.name = name
+      await company.save()
+      return res.json({ msg: 'Company has been modified' })
+    } catch (err) {
+      console.error(err.message)
+      return res.status(500).send('Server Error')
+    }
+  }
+)
+
 module.exports = router

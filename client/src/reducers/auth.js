@@ -4,20 +4,24 @@ import {
   LOGIN_FAIL,
   LOGIN_SUCCESS,
   LOGOUT,
+  REQUEST_USER,
 } from '../actions/types'
 
 const initalState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
-  loading: true,
+  loading: false,
   user: null,
 }
 
 export default (state = initalState, { type, payload }) => {
   switch (type) {
+    case REQUEST_USER:
+      return { ...state, loading: true }
+
     case LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token)
-      return { ...state, ...payload, isAuthenticated: true, loading: false }
+      return { ...state, ...payload, isAuthenticated: true }
 
     case USER_LOADED:
       return { ...state, user: payload, isAuthenticated: true, loading: false }

@@ -5,6 +5,7 @@ import {
   LOGOUT,
   USER_LOADED,
   AUTH_ERROR,
+  REQUEST_USER,
 } from './types'
 import { setAlert } from './alert'
 import { setLoader } from './loading'
@@ -18,15 +19,15 @@ export const login = (email, password, history) => async dispatch => {
   }
   const body = JSON.stringify({ email, password })
 
+  dispatch({ type: REQUEST_USER })
   // make post req
   try {
     const res = await axios.post('/api/auth', body, config)
-    await dispatch({
+    dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
     })
-    await dispatch(loadUser())
-    history.push('/admin/profile')
+    dispatch(loadUser())
   } catch (err) {
     // handle error sent by API
     console.log('Other err ' + err)

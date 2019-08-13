@@ -59,3 +59,25 @@ export const deleteCompany = id => async dispatch => {
     }
   }
 }
+
+export const editCompany = data => async dispatch => {
+  const config = {
+    headers: { 'Content-Type': 'application/json' },
+  }
+  const body = JSON.stringify({ name: data.name })
+
+  try {
+    dispatch(setLoader(true))
+    const res = await axios.put(`/api/company/${data._id}`, body, config)
+    dispatch(setAlert(res.data.msg, 'success'))
+    dispatch(getCompanies())
+    dispatch(setLoader(false))
+  } catch (err) {
+    dispatch(setLoader(false))
+    // handle error sent by API
+    const errors = err.response.data.errors
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
+    }
+  }
+}

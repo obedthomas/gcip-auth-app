@@ -83,7 +83,6 @@ const AdminLayout = props => {
       sidenavOpen: !sidenavOpen,
     })
   }
-
   return (
     <React.Fragment>
       <BarLoader

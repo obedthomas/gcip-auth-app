@@ -20,6 +20,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap'
+import EditCompany from './EditCompany'
 
 //MoonLoader css
 const override = css`
@@ -27,13 +28,18 @@ const override = css`
   margin: 4rem auto;
 `
 
-const AllCompanies = ({ companies, deleteCompany }) => {
-  console.log()
-
+const AllCompanies = ({ companies, deleteCompany, history }) => {
   const [alerts, setAlerts] = useState({
     alert: false,
     id: '',
   })
+
+  const editCompany = company => {
+    return history.push({
+      pathname: '/admin/companies/edit-company',
+      state: { company },
+    })
+  }
 
   const onConfirm = () => {
     // make delete call to api
@@ -64,7 +70,7 @@ const AllCompanies = ({ companies, deleteCompany }) => {
           <i className="fas fa-ellipsis-v" />
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-arrow" right>
-          <DropdownItem onClick={e => e.preventDefault()}>
+          <DropdownItem onClick={e => editCompany(row)}>
             <span className="text-primary">
               <i className="fa fa-edit mr-2"></i> Edit
             </span>
