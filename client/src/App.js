@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Switch, Redirect } from 'react-router-dom'
 import setAuthToken from './utils/setAuthToken'
 
 import PublicLayout from './layouts/PublicLayout'
@@ -24,6 +24,8 @@ import { Provider } from 'react-redux'
 import store from './store'
 import { loadUser } from './actions/auth'
 import Alerts from './components/Alerts/Alerts'
+import PrivateRoute from './utils/PrivateRoute'
+import PublicRoute from './utils/PublicRoute'
 
 if (localStorage.token) {
   setAuthToken(localStorage.token)
@@ -37,9 +39,11 @@ const App = () => {
     <Provider store={store}>
       <Alerts />
       <Switch>
-        <Route path="/public" render={props => <PublicLayout {...props} />} />
-        <Route path="/admin" render={props => <AdminLayout {...props} />} />
-        <Redirect from="/" to="/public/login" />
+        {/* <Route path="/public" render={props => <PublicLayout {...props} />} /> */}
+        {/* <Route path="/admin" render={props => <AdminLayout {...props} />} /> */}
+        <PublicRoute path="/public" component={PublicLayout} />
+        <PrivateRoute path="/admin" component={AdminLayout} />
+        <Redirect from="*" to="/public/login" />
       </Switch>
     </Provider>
   )

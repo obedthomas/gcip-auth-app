@@ -12,7 +12,7 @@ import setAuthToken from './../utils/setAuthToken'
 import { getUsers } from './users'
 
 // Login user
-export const login = (email, password) => async dispatch => {
+export const login = (email, password, history) => async dispatch => {
   const config = {
     headers: { 'Content-Type': 'application/json' },
   }
@@ -21,13 +21,15 @@ export const login = (email, password) => async dispatch => {
   // make post req
   try {
     const res = await axios.post('/api/auth', body, config)
-    dispatch({
+    await dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data,
     })
     dispatch(loadUser())
+    history.push('/admin/profile')
   } catch (err) {
     // handle error sent by API
+    console.log('Other err ' + err)
     const errors = err.response.data.errors
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
@@ -68,8 +70,8 @@ export const register = (data, push) => async dispatch => {
     push('/admin/users')
   } catch (err) {
     // handle error sent by API
-    const errors = err.response.data.errors
     console.log(errors)
+    const errors = err.response.data.errors
     dispatch(setLoader(false))
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))

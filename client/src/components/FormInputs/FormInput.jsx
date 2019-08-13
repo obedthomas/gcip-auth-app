@@ -33,6 +33,22 @@ const FormInput = ({
     } else return null
   }
 
+  const autocompleteCheck = () => {
+    switch (type) {
+      case 'password':
+        return 'current-password'
+
+      case 'username':
+        return 'username'
+
+      case 'email':
+        return 'username'
+
+      default:
+        return false
+    }
+  }
+
   return (
     <FormGroup>
       {label && (
@@ -54,6 +70,7 @@ const FormInput = ({
           </InputGroupAddon>
         )}
         <Input
+          autocomplete={autocompleteCheck()}
           placeholder={placeholder}
           type={type}
           id={name}

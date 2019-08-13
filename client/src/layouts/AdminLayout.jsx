@@ -28,8 +28,6 @@ const override = css`
 const AdminLayout = props => {
   const {
     location: { pathname },
-    auth: { isAuthenticated },
-    user,
     loading,
     fetchStats,
     stats,
@@ -45,12 +43,7 @@ const AdminLayout = props => {
     document.documentElement.scrollTop = 0
     document.scrollingElement.scrollTop = 0
     if (stats.loading) fetchStats()
-  }, [
-    document.documentElement.scrollTop,
-    document.scrollingElement.scrollTop,
-    stats,
-    fetchStats,
-  ])
+  }, [stats, fetchStats])
 
   // dynamically renders all routes with '/admin/...'
   const getRoutes = routes => {
@@ -91,52 +84,44 @@ const AdminLayout = props => {
     })
   }
 
-  if (isAuthenticated && user) {
-    return (
-      <React.Fragment>
-        <BarLoader
-          css={override}
-          sizeUnit={'px'}
-          color={'#4553ff'}
-          loading={loading}
-        />
-        <AdminSidebar
-          {...props}
-          routes={routes}
-          toggleSidenav={toggleSidenav}
-          sidenavOpen={sidenavOpen}
-          logo={{
-            innerLink: '/admin/profile',
-            imgSrc: require('../assets/img/brand/short-logo.png'),
-            imgAlt: 'GCIP',
-          }}
-        />
+  return (
+    <React.Fragment>
+      <BarLoader
+        css={override}
+        sizeUnit={'px'}
+        color={'#4553ff'}
+        loading={loading}
+      />
+      <AdminSidebar
+        {...props}
+        routes={routes}
+        toggleSidenav={toggleSidenav}
+        sidenavOpen={sidenavOpen}
+        logo={{
+          innerLink: '/admin/profile',
+          imgSrc: require('../assets/img/brand/short-logo.png'),
+          imgAlt: 'GCIP',
+        }}
+      />
 
-        <div className="main-content">
-          <AdminNavbar {...props} brandText={getBrandText(pathname)} />
-          <Switch>{getRoutes(routes)}</Switch>
-          <Container fluid>
-            <AdminFooter />
-          </Container>
-        </div>
-      </React.Fragment>
-    )
-  } else {
-    return null
-  }
+      <div className="main-content">
+        <AdminNavbar brandText={getBrandText(pathname)} />
+        <Switch>{getRoutes(routes)}</Switch>
+        <Container fluid>
+          <AdminFooter />
+        </Container>
+      </div>
+    </React.Fragment>
+  )
 }
 
 AdminLayout.propTypes = {
-  auth: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  user: PropTypes.object.isRequired,
   fetchStats: PropTypes.func.isRequired,
   stats: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
-  auth: state.auth,
-  user: state.auth.user,
   loading: state.loading.showLoader,
   stats: state.stats,
 })

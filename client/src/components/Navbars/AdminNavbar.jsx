@@ -68,9 +68,14 @@ const AdminNavbar = ({ brandText, user, logout }) => {
 
 AdminNavbar.propTypes = {
   logout: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
+const mapStateToProps = state => ({
+  user: state.auth.user,
+})
+
 export default connect(
-  null,
+  mapStateToProps,
   { logout }
 )(AdminNavbar)

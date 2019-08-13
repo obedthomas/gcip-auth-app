@@ -7,7 +7,7 @@ import FormInput from './../FormInputs/FormInput'
 // reactstrap components
 import { Button, Card, CardBody, Form, Row, Col } from 'reactstrap'
 
-const Login = ({ isAuthenticated, login, history }) => {
+const Login = ({ login, history }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -22,13 +22,9 @@ const Login = ({ isAuthenticated, login, history }) => {
 
   const onSubmit = e => {
     e.preventDefault()
-    login(email, password)
+    return login(email, password, history)
   }
 
-  // Redirect is logged in
-  if (isAuthenticated) {
-    history.push('/admin/profile')
-  }
   return (
     <Col lg="5" md="7">
       <Card className="bg-secondary shadow border-0">
@@ -36,7 +32,7 @@ const Login = ({ isAuthenticated, login, history }) => {
           <div className="text-center text-muted mb-4">
             <small>Sign in with credentials</small>
           </div>
-          <Form role="form" onSubmit={e => onSubmit(e)}>
+          <Form onSubmit={e => onSubmit(e)}>
             <FormInput
               placeholder="Work Email"
               type="email"
