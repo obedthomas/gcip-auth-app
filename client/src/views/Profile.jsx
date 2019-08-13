@@ -4,6 +4,7 @@ import { PropTypes } from 'prop-types'
 import { getCompanies } from './../actions/company'
 import { editUser } from '../actions/auth'
 import { setAlert } from './../actions/alert'
+import { deptOptions, roleOptions } from '../variables/formOptions'
 // reactstrap components
 import { Form, Container, Row, Col } from 'reactstrap'
 // core componenets
@@ -40,19 +41,6 @@ const Profile = ({ user, getCompanies, companies, setAlert, editUser }) => {
   useEffect(() => {
     if (companies.loading) getCompanies()
   }, [getCompanies, companies])
-
-  const deptOptions = [
-    { name: 'Payroll' },
-    { name: 'IT' },
-    { name: 'Accounting' },
-    { name: 'Properties' },
-  ]
-
-  const roleOptions = [
-    { name: 'Admin' },
-    { name: 'Manager' },
-    { name: 'Employee' },
-  ]
 
   const onChange = e => {
     e.preventDefault()
@@ -139,7 +127,7 @@ const Profile = ({ user, getCompanies, companies, setAlert, editUser }) => {
                       valid={companyCheck}
                       onChange={onChange}
                       label="Company"
-                      options={companies}
+                      options={companies.companies}
                       disabled={!edit}
                       required
                     />
@@ -182,14 +170,14 @@ const Profile = ({ user, getCompanies, companies, setAlert, editUser }) => {
 
 Profile.propTypes = {
   user: PropTypes.object.isRequired,
-  companies: PropTypes.array.isRequired,
+  companies: PropTypes.object.isRequired,
   editUser: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
   user: state.auth.user,
-  companies: state.company.companies,
+  companies: state.company,
 })
 
 export default connect(

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import { deptOptions, roleOptions } from '../../variables/formOptions'
 // reactstrap components
 import { Container, Row, Col, Form, Button } from 'reactstrap'
 // core componentsw
@@ -77,19 +78,6 @@ const AddUser = ({ history, register, companies, getCompanies }) => {
       })
     }
   }
-
-  const deptOptions = [
-    { name: 'Payroll' },
-    { name: 'IT' },
-    { name: 'Accounting' },
-    { name: 'Properties' },
-  ]
-
-  const roleOptions = [
-    { name: 'Admin' },
-    { name: 'Manager' },
-    { name: 'Employee' },
-  ]
 
   const onSubmit = async e => {
     e.preventDefault()

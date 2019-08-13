@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import { deptOptions, roleOptions } from '../../variables/formOptions'
 // reactstrap components
 import {
   FormGroup,
@@ -42,19 +43,6 @@ const EditUser = ({ history, location, companies, setAlert, editUser }) => {
     e.preventDefault()
     return setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-
-  const deptOptions = [
-    { name: 'Payroll' },
-    { name: 'IT' },
-    { name: 'Accounting' },
-    { name: 'Properties' },
-  ]
-
-  const roleOptions = [
-    { name: 'Admin' },
-    { name: 'Manager' },
-    { name: 'Employee' },
-  ]
 
   const onSubmit = async e => {
     e.preventDefault()
