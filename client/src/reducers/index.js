@@ -5,5 +5,14 @@ import company from './company'
 import loading from './loading'
 import users from './users'
 import stats from './stats'
+import apps from './apps'
 
-export default combineReducers({ auth, alert, company, loading, users, stats })
+export default combineReducers({
+  auth,
+  alert,
+  company,
+  loading,
+  users,
+  stats,
+  apps,
+})

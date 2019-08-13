@@ -20,7 +20,6 @@ import {
   DropdownMenu,
   DropdownItem,
 } from 'reactstrap'
-import EditCompany from './EditCompany'
 
 //MoonLoader css
 const override = css`

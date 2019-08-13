@@ -3,6 +3,7 @@ import Register from './components/Auth/Register'
 import Profile from './views/Profile'
 import Users from './views/Users/Users'
 import Companies from './views/Companies/Companies'
+import Applications from './views/Application/Applications'
 
 const routes = [
   {
@@ -48,6 +49,15 @@ const routes = [
     name: 'Companies',
     icon: 'ni ni-building text-warning',
     component: Companies,
+    layout: '/admin',
+    hide: false,
+    exact: false,
+  },
+  {
+    path: '/applications',
+    name: 'Applications',
+    icon: 'fa fa-desktop text-info',
+    component: Applications,
     layout: '/admin',
     hide: false,
     exact: false,

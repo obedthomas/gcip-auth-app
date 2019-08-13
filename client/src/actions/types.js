@@ -18,3 +18,7 @@ export const STOP_LOADING = 'STOP_LOADING'
 export const LOAD_USERS = 'LOAD_USERS'
 // STATS
 export const FETCH_STATS = 'FETCH_STATS'
+// APPS
+export const FETCH_APPS = 'FETCH_APPS'
+export const RECEIVE_APPS = 'RECEIVE_APPS'
+export const FAILED_FETCH_APPS = 'FAILED_FETCH_APPS'

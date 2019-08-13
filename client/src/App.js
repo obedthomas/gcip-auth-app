@@ -40,6 +40,7 @@ const App = () => {
       <Switch>
         <Route path="/public" render={props => <PublicLayout {...props} />} />
         <PrivateRoute path="/admin" component={AdminLayout} />
+        <Redirect from="/" to="/public/login" />
       </Switch>
     </Provider>
   )
