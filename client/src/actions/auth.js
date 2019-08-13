@@ -25,7 +25,7 @@ export const login = (email, password, history) => async dispatch => {
       type: LOGIN_SUCCESS,
       payload: res.data,
     })
-    dispatch(loadUser())
+    await dispatch(loadUser())
     history.push('/admin/profile')
   } catch (err) {
     // handle error sent by API
@@ -70,7 +70,7 @@ export const register = (data, push) => async dispatch => {
     push('/admin/users')
   } catch (err) {
     // handle error sent by API
-    console.log(errors)
+    console.log(err)
     const errors = err.response.data.errors
     dispatch(setLoader(false))
     if (errors) {

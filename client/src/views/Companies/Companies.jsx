@@ -7,6 +7,7 @@ import { getCompanies } from '../../actions/company'
 import DashboardHeader from '../../components/Headers/DashboardHeader'
 import AllCompanies from './AllCompanies'
 import AddCompany from './AddCompany'
+import EditCompany from './EditCompany'
 
 const Companies = ({ companies, getCompanies, auth }) => {
   useEffect(() => {
@@ -22,6 +23,10 @@ const Companies = ({ companies, getCompanies, auth }) => {
           render={props => (
             <AddCompany {...props} getCompanies={getCompanies} />
           )}
+        />
+        <Route
+          path="/admin/companies/edit-company"
+          render={props => <EditCompany {...props} />}
         />
         <Route
           path="/"

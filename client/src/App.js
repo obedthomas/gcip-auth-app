@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Switch, Redirect } from 'react-router-dom'
+import { Switch, Redirect, Route } from 'react-router-dom'
 import setAuthToken from './utils/setAuthToken'
 
 import PublicLayout from './layouts/PublicLayout'
@@ -39,10 +39,10 @@ const App = () => {
     <Provider store={store}>
       <Alerts />
       <Switch>
-        {/* <Route path="/public" render={props => <PublicLayout {...props} />} /> */}
         {/* <Route path="/admin" render={props => <AdminLayout {...props} />} /> */}
-        <PublicRoute path="/public" component={PublicLayout} />
         <PrivateRoute path="/admin" component={AdminLayout} />
+        <Route path="/public" render={props => <PublicLayout {...props} />} />
+        {/* <PublicRoute path="/public" component={PublicLayout} /> */}
         <Redirect from="*" to="/public/login" />
       </Switch>
     </Provider>
