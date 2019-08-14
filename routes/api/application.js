@@ -4,6 +4,7 @@ const auth = require('../../middleware/auth')
 // Models
 const User = require('../../models/User')
 const App = require('../../models/Application')
+const Permission = require('../../models/Permission')
 
 // @type    :   GET
 // @route   :   api/application
@@ -167,14 +168,7 @@ router.post(
       }
       // if app exists
       const { name, users } = req.body
-      // check is permission name exists
-      const isMatch = await App.findOne({ 'permissions.name': name })
-      if (isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Permission name already taken' }] })
-      }
-      // if name does not exist
+
       // validate all user ids
       let userErrors = []
       let validatedUsers = []
@@ -189,8 +183,15 @@ router.post(
         return res.status(400).json({ errors: userErrors })
       }
       // if all users are valid
+      // create permission
+      const permission = new Permission({
+        name,
+        users: validatedUsers,
+      })
+      // save permission to db
+      await permission.save()
       // add permission to app
-      await app.permissions.push({ name, users: validatedUsers })
+      await app.permissions.push(permission)
       await app.save()
       return res.json({ msg: 'Permissions Added' })
     } catch (err) {
