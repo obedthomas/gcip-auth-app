@@ -204,11 +204,11 @@ router.post(
 )
 
 // @type    :   PUT
-// @route   :   api/application/:id/permissions/:permissionId
+// @route   :   api/application/permissions/:permissionId
 // @desc    :   Edit permissions to an application
 // @access  :   PRIVATE/admin
 router.put(
-  '/:id/permissions/:permissionId',
+  '/permissions/:permissionId',
   [
     auth('admin'),
     [
@@ -226,35 +226,35 @@ router.put(
     }
     // if no errors
     try {
-      const app = await App.findById(req.params.id)
-      // if no app
-      if (!app) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Application does not exist' }] })
-      }
       // if app exists
       const { name, users } = req.body
-      const { id, permissionId } = req.params
-      const data = await App.findOneAndUpdate(
-        {
-          _id: id,
-          'permissions._id': permissionId,
-        },
-        {
-          $set: { 'permissions.$.name': name, 'permissions.$.users': users },
-        },
-        {
-          select: {
-            permissions: {
-              $elemMatch: { _id: permissionId },
-            },
-          },
-        }
-      )
-      if (!data.toString().includes('Cast to ObjectId failed')) {
-        return res.json({ msg: 'Permission has been updated' })
+      const { permissionId } = req.params
+      // validate all user ids
+      let userErrors = []
+      let validatedUsers = []
+      for (const user of users) {
+        const r = await User.findById(user)
+        r
+          ? validatedUsers.push(r._id)
+          : userErrors.push({ msg: 'User not found', id: user })
       }
+      // check if any users were not found
+      if (userErrors.length > 0) {
+        return res.status(400).json({ errors: userErrors })
+      }
+      // does permission doc exist
+      const permission = await Permission.findById(permissionId)
+      // if no permission
+      if (!permission) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Permission does not exist' }] })
+      }
+      // else
+      permission.name = name
+      permission.users = validatedUsers
+      await permission.save()
+      return res.json({ msg: 'Permission has been updated' })
     } catch (err) {
       console.error(err.message)
       return err.kind === 'ObjectId'
@@ -265,3 +265,21 @@ router.put(
 )
 
 module.exports = router
+
+// EXAMPLE OF UPDATING INSIDE NESTED ARRAYS
+// const data = await App.findOneAndUpdate(
+//   {
+//     _id: id,
+//     permissions: permissionId,
+//   },
+//   {
+//     $set: { 'permissions.$.name': name, 'permissions.$.users': users },
+//   },
+//   {
+//     select: {
+//       permissions: {
+//         $elemMatch: { _id: permissionId },
+//       },
+//     },
+//   }
+// )

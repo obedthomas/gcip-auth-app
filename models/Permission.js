@@ -14,6 +14,7 @@ const PermissionSchema = new mongoose.Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'user',
+      unique: true,
     },
   ],
 })
