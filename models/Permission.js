@@ -1,25 +1,21 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const ApplicationSchema = new mongoose.Schema({
+const PermissionSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   createdOn: {
     type: Date,
     default: Date.now,
   },
-  permissions: [
+  users: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'permission',
+      ref: 'user',
     },
   ],
-  comments: {
-    type: String,
-  },
 })
 
-module.exports = Application = mongoose.model('application', ApplicationSchema)
+module.exports = Permission = mongoose.model('permission', PermissionSchema)
