@@ -62,7 +62,6 @@ const FormInput = ({
           disabled={disabled}
           onChange={e => onChange(e, required, type, length)}
         ></Input>
-        <div className="valid-feedback">Looks good!</div>
       </InputGroup>
     </FormGroup>
   )
