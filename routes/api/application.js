@@ -19,6 +19,20 @@ router.get('/', auth('all'), async (req, res) => {
   }
 })
 
+// @type    :   GET
+// @route   :   api/application/:id
+// @desc    :   Get details for single application
+// @access  :   PRIVATE/admin
+router.get('/:id', auth('admin'), async (req, res) => {
+  try {
+    const app = await App.findById(req.params.id)
+    return res.json(app)
+  } catch (err) {
+    console.error(err.message)
+    res.status(500).send('Server Error')
+  }
+})
+
 // @type    :   POST
 // @route   :   api/application
 // @desc    :   Add an application to DB

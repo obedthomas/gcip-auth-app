@@ -11,8 +11,8 @@ import EditCompany from './EditCompany'
 
 const Companies = ({ companies, getCompanies, auth }) => {
   useEffect(() => {
-    if (companies.loading) getCompanies()
-  }, [companies, getCompanies])
+    getCompanies()
+  }, [getCompanies])
 
   return (
     <React.Fragment>

@@ -69,7 +69,7 @@ const AllCompanies = ({ companies, deleteCompany, history }) => {
           <i className="fas fa-ellipsis-v" />
         </DropdownToggle>
         <DropdownMenu className="dropdown-menu-arrow" right>
-          <DropdownItem onClick={e => editCompany(row)}>
+          <DropdownItem onClick={() => editCompany(row)}>
             <span className="text-primary">
               <i className="fa fa-edit mr-2"></i> Edit
             </span>
