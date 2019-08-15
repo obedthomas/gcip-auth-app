@@ -40,7 +40,7 @@ const Profile = ({ user, getCompanies, companies, setAlert, editUser }) => {
 
   useEffect(() => {
     if (companies.loading) getCompanies()
-  }, [getCompanies, companies])
+  }, [getCompanies, companies.loading])
 
   const onChange = e => {
     e.preventDefault()

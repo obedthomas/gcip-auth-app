@@ -1,13 +1,18 @@
 import axios from 'axios'
-import { ALL_COMPANIES, GET_COMPANIES_FAIL } from './types'
+import {
+  FETCH_COMPANIES,
+  RECEIVE_COMPANIES,
+  FETCH_COMPANIES_FAIL,
+} from './types'
 import { setAlert } from './alert'
 import { setLoader } from './loading'
 
 export const getCompanies = () => async dispatch => {
+  dispatch({ type: FETCH_COMPANIES })
   try {
     const res = await axios.get('/api/company')
     dispatch({
-      type: ALL_COMPANIES,
+      type: RECEIVE_COMPANIES,
       payload: res.data,
     })
   } catch (err) {
@@ -15,8 +20,8 @@ export const getCompanies = () => async dispatch => {
     const errors = err.response.data.errors
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
+      dispatch({ type: FETCH_COMPANIES_FAIL, payload: errors })
     }
-    dispatch({ type: GET_COMPANIES_FAIL })
   }
 }
 

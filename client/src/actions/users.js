@@ -1,13 +1,14 @@
 import axios from 'axios'
-import { LOAD_USERS } from './types'
+import { FETCH_USERS, RECEIVE_USERS, FAILED_FETCH_USERS } from './types'
 import { setAlert } from './alert'
 import { setLoader } from './loading'
 
 export const getUsers = () => async dispatch => {
+  dispatch({ type: FETCH_USERS })
   try {
     const res = await axios.get('/api/user')
     dispatch({
-      type: LOAD_USERS,
+      type: RECEIVE_USERS,
       payload: res.data,
     })
   } catch (err) {
@@ -16,6 +17,7 @@ export const getUsers = () => async dispatch => {
     const errors = err.response.data.errors
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
+      dispatch({ type: FAILED_FETCH_USERS, payload: errors })
     }
   }
 }

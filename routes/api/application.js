@@ -258,7 +258,9 @@ router.put(
     } catch (err) {
       console.error(err.message)
       return err.kind === 'ObjectId'
-        ? res.status(404).json({ errors: [{ msg: 'Incorrect ID' }] })
+        ? res
+            .status(404)
+            .json({ errors: [{ msg: 'Permission does not exist' }] })
         : res.status(500).send('Server Error')
     }
   }

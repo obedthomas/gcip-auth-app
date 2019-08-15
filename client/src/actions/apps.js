@@ -13,7 +13,7 @@ export const getApps = () => async dispatch => {
     const errors = err.response.data.errors
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
+      dispatch({ type: FAILED_FETCH_APPS, payload: errors })
     }
-    dispatch({ type: FAILED_FETCH_APPS, payload: errors })
   }
 }
