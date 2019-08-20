@@ -5,7 +5,6 @@ const ApplicationSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    unique: true,
   },
   createdOn: {
     type: Date,

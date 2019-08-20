@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const PermissionSchema = new mongoose.Schema({
-  name: {
+  permissionName: {
     type: String,
     required: true,
   },
@@ -14,7 +14,6 @@ const PermissionSchema = new mongoose.Schema({
     {
       type: Schema.Types.ObjectId,
       ref: 'user',
-      unique: true,
     },
   ],
 })

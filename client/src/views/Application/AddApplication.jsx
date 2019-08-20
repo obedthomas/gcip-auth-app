@@ -17,8 +17,9 @@ import {
 // core components
 import FormCard from '../../components/FormInputs/FormCard'
 import FormInput from '../../components/FormInputs/FormInput'
+import { addApp } from '../../actions/apps'
 
-const AddApplication = ({ history }) => {
+const AddApplication = ({ history, addApp }) => {
   const [formData, setFormData] = useState({
     appName: '',
     appNameCheck: null,
@@ -54,7 +55,12 @@ const AddApplication = ({ history }) => {
 
   const onSubmit = async e => {
     e.preventDefault()
-    console.log(formData)
+    const data = {
+      name: appName,
+      comments,
+    }
+    await addApp(data)
+    return history.push('/admin/applications')
   }
 
   return (
@@ -113,5 +119,5 @@ AddApplication.propTypes = {}
 
 export default connect(
   null,
-  {}
+  { addApp }
 )(AddApplication)

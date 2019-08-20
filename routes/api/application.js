@@ -146,7 +146,7 @@ router.post(
     auth('admin'),
     [
       // Validation
-      check('name', 'Name of permission is required')
+      check('permissionName', 'Name of permission is required')
         .not()
         .isEmpty(),
     ],
@@ -167,7 +167,7 @@ router.post(
           .json({ errors: [{ msg: 'Application does not exist' }] })
       }
       // if app exists
-      const { name, users } = req.body
+      const { permissionName, users } = req.body
 
       // validate all user ids
       let userErrors = []
@@ -183,9 +183,22 @@ router.post(
         return res.status(400).json({ errors: userErrors })
       }
       // if all users are valid
+      // check if permission name already exists inside current application doc
+      for (const permission of app.permissions) {
+        const r = await Permission.findById(permission._id)
+        if (r.permissionName === permissionName) {
+          return res.status(400).json({
+            errors: [
+              {
+                msg: `'${permissionName}' already exists in this application`,
+              },
+            ],
+          })
+        }
+      }
       // create permission
       const permission = new Permission({
-        name,
+        permissionName,
         users: validatedUsers,
       })
       // save permission to db

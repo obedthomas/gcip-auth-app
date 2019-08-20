@@ -17,3 +17,24 @@ export const getApps = () => async dispatch => {
     }
   }
 }
+
+export const addApp = data => async dispatch => {
+  dispatch(setLoader(true))
+  const config = {
+    headers: { 'Content-Type': 'application/json' },
+  }
+  const body = JSON.stringify(data)
+  try {
+    const res = await axios.post('/api/application', body, config)
+    dispatch(setAlert(res.data.msg, 'success'))
+    dispatch(getApps())
+    dispatch(setLoader(false))
+  } catch (err) {
+    dispatch(setLoader(false))
+    // handle error sent by API
+    const errors = err.response.data.errors
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
+    }
+  }
+}

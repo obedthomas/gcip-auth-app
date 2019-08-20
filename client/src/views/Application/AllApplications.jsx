@@ -55,7 +55,14 @@ const AllApplications = ({ apps, deleteApp, history }) => {
 
   const columns = [
     { dataField: 'name', text: 'Application Name', sort: true },
-    { dataField: 'comments', text: 'Comments', sort: false },
+    {
+      dataField: 'comments',
+      text: 'Comments',
+      sort: false,
+      style: (cell, row, i, cI) => {
+        return { whiteSpace: 'normal' }
+      },
+    },
     {
       dataField: 'edit',
       text: '',
