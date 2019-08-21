@@ -22,9 +22,12 @@ const AllApplications = ({ apps, deleteApp, history }) => {
     id: '',
   })
 
+  const data = [...apps.apps]
+  data.forEach(app => (app['permissionCount'] = app.permissions.length))
+
   const editApp = app => {
     return history.push({
-      pathname: '/admin/applications/edit-applciation',
+      pathname: '/admin/applications/edit-application',
       state: { app },
     })
   }
@@ -63,6 +66,7 @@ const AllApplications = ({ apps, deleteApp, history }) => {
         return { whiteSpace: 'normal' }
       },
     },
+    { dataField: 'permissionCount', text: 'Permissions', sort: true },
     {
       dataField: 'edit',
       text: '',
@@ -111,7 +115,7 @@ const AllApplications = ({ apps, deleteApp, history }) => {
                 color={'#11cdef'}
               />
             ) : (
-              <ReactBSTables data={apps.apps} columns={columns} />
+              <ReactBSTables data={data} columns={columns} />
             )}
           </Card>
         </div>
