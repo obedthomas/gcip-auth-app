@@ -12,7 +12,7 @@ const Permission = require('../../models/Permission')
 // @access  :   PRIVATE
 router.get('/', auth('all'), async (req, res) => {
   try {
-    const apps = await App.find().select('-permissions')
+    const apps = await App.find()
     return res.json(apps)
   } catch (err) {
     console.error(err.message)
