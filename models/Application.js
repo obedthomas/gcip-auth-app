@@ -21,4 +21,11 @@ const ApplicationSchema = new mongoose.Schema({
   },
 })
 
+// 'this' is the application being removed.
+ApplicationSchema.pre('remove', async function(next) {
+  const Permission = mongoose.model('permission')
+  await Permission.deleteMany({ _id: { $in: this.permissions } })
+  next()
+})
+
 module.exports = Application = mongoose.model('application', ApplicationSchema)

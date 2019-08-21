@@ -214,7 +214,7 @@ router.post(
       // add permission to app
       await app.permissions.push(permission)
       await app.save()
-      return res.json({ msg: 'Permissions Added' })
+      return res.json({ msg: 'Permission Added' })
     } catch (err) {
       console.error(err.message)
       return err.kind === 'ObjectId'
@@ -286,6 +286,32 @@ router.put(
     }
   }
 )
+
+// @type    :   DELETE
+// @route   :   api/application/:id
+// @desc    :   Delete an application and associated permissions
+// @access  :   Private/admin
+router.delete('/:id', auth('admin'), async (req, res) => {
+  try {
+    const app = await App.findById(req.params.id)
+    if (!app) {
+      return res
+        .status(400)
+        .json({ errors: [{ msg: 'Application does not exist' }] })
+    }
+    // if app exists
+    // remove app from DB
+    await app.remove()
+    return res.json({ msg: 'Application has been deleted' })
+  } catch (err) {
+    console.error(err.message)
+    return err.kind === 'ObjectId'
+      ? res
+          .status(404)
+          .json({ errors: [{ msg: 'Application does not exist' }] })
+      : res.status(500).send('Server Error')
+  }
+})
 
 module.exports = router
 
