@@ -193,6 +193,7 @@ router.post(
       // check if permission name already exists inside current application doc
       for (const permission of app.permissions) {
         const r = await Permission.findById(permission._id)
+        console.log(permissionName)
         if (r.permissionName === permissionName) {
           return res.status(400).json({
             errors: [

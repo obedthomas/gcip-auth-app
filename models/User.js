@@ -44,4 +44,16 @@ const UserSchema = new mongoose.Schema({
   },
 })
 
+// not using arrow function because 'this' will refer to the current company
+// 'this' is the user being removed.
+UserSchema.pre('remove', async function(next) {
+  const Permission = mongoose.model('permission')
+  const permissions = await Permission.find({ users: this._id })
+  for (const perm of permissions) {
+    await perm.users.pull({ _id: this._id })
+    await perm.save()
+  }
+  next()
+})
+
 module.exports = User = mongoose.model('user', UserSchema)
