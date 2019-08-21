@@ -26,7 +26,14 @@ router.get('/', auth('all'), async (req, res) => {
 // @access  :   PRIVATE/admin
 router.get('/:id', auth('admin'), async (req, res) => {
   try {
-    const app = await App.findById(req.params.id)
+    const app = await App.findById(req.params.id).populate({
+      path: 'permissions',
+      populate: {
+        path: 'users',
+        model: 'user',
+        select: 'firstName lastName',
+      },
+    })
     return res.json(app)
   } catch (err) {
     console.error(err.message)
