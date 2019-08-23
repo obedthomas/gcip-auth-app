@@ -29,6 +29,7 @@ export const addApp = data => async dispatch => {
     dispatch(setAlert(res.data.msg, 'success'))
     dispatch(getApps())
     dispatch(setLoader(false))
+    return true
   } catch (err) {
     dispatch(setLoader(false))
     // handle error sent by API
@@ -36,5 +37,6 @@ export const addApp = data => async dispatch => {
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
     }
+    return null
   }
 }
