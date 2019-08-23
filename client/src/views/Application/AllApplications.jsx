@@ -17,7 +17,7 @@ const override = css`
   margin: 4rem auto;
 `
 
-const AllApplications = ({ apps, deleteApp, history, getApp }) => {
+const AllApplications = ({ apps, deleteApp, history }) => {
   const [alerts, setAlerts] = useState({
     alert: false,
     id: '',
@@ -27,12 +27,9 @@ const AllApplications = ({ apps, deleteApp, history, getApp }) => {
   data.forEach(app => (app['permissionCount'] = app.permissions.length))
 
   const editApp = async app => {
-    const res = await getApp(app._id)
-    return res
-      ? history.push({
-          pathname: `/admin/applications/edit-application/${app._id}`,
-        })
-      : null
+    history.push({
+      pathname: `/admin/applications/edit-application/${app._id}`,
+    })
   }
 
   const onConfirm = () => {
@@ -129,7 +126,6 @@ const AllApplications = ({ apps, deleteApp, history, getApp }) => {
 
 AllApplications.propTypes = {
   apps: PropTypes.object.isRequired,
-  getApp: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -138,5 +134,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getApp }
+  {}
 )(AllApplications)

@@ -17,6 +17,7 @@ import {
 // core components
 import FormCard from '../../components/FormInputs/FormCard'
 import FormInput from '../../components/FormInputs/FormInput'
+import { getApp } from './../../actions/apps'
 
 //MoonLoader css
 const override = css`
@@ -25,6 +26,13 @@ const override = css`
 `
 
 class EditApplication extends Component {
+  async componentWillMount() {
+    const { match, getApp } = this.props
+    const appId = match.params.id
+    await getApp(appId)
+    this.setState({ ...this.props.app.details })
+  }
+
   state = {
     ...this.props.app.details,
     nameCheck: null,
@@ -157,5 +165,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {}
+  { getApp }
 )(EditApplication)

@@ -23,7 +23,7 @@ const Applications = ({ apps, getApps }) => {
           render={props => <AddApplication {...props} />}
         />
         <Route
-          path="/admin/applications/edit-application"
+          path="/admin/applications/edit-application/:id"
           render={props => <EditApplication {...props} />}
         />
         <Route
