@@ -49,12 +49,12 @@ export const addApp = data => async dispatch => {
 }
 
 export const getApp = id => async dispatch => {
+  dispatch({ type: FETCH_SINGLE_APP })
   dispatch(setLoader(true))
   try {
     const res = await axios.get(`/api/application/${id}`)
     dispatch({ type: RECEIVE_SINGLE_APP, payload: res.data })
     dispatch(setLoader(false))
-    return true
   } catch (err) {
     dispatch(setLoader(false))
     // handle error sent by API
@@ -63,6 +63,5 @@ export const getApp = id => async dispatch => {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
       dispatch({ type: FAILED_FETCH_SINGLE_APP, payload: errors })
     }
-    return null
   }
 }

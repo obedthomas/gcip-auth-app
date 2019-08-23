@@ -26,17 +26,16 @@ const override = css`
 `
 
 class EditApplication extends Component {
-  async componentWillMount() {
-    const { match, getApp } = this.props
-    const appId = match.params.id
-    await getApp(appId)
-    this.setState({ ...this.props.app.details })
+  async componentDidMount() {
+    const appId = this.props.match.params.id
+    await this.props.getApp(appId)
+    this.setState({ loading: false, ...this.props.app.details })
   }
 
   state = {
-    ...this.props.app.details,
     nameCheck: null,
     permissionNameCheck: null,
+    loading: true,
   }
 
   onChange = (e, required, type, length) => {
@@ -63,15 +62,7 @@ class EditApplication extends Component {
   }
 
   render() {
-    const {
-      name,
-      nameCheck,
-      comments,
-      permissionName,
-      permissionNameCheck,
-      users,
-      usersCheck,
-    } = this.state
+    const { name, nameCheck, comments, permissions, loading } = this.state
     const { history, app } = this.props
 
     return (
@@ -82,7 +73,7 @@ class EditApplication extends Component {
             btnText="Back"
             onClick={history.goBack}
           >
-            {app.loading ? (
+            {loading ? (
               <Row>
                 <ScaleLoader
                   css={override}
