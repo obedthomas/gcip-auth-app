@@ -37,7 +37,6 @@ class EditApplication extends Component {
     ...this.props.app.details,
     nameCheck: null,
     permissionNameCheck: null,
-    usersCheck: null,
   }
 
   onChange = (e, required, type, length) => {
