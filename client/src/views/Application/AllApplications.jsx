@@ -9,6 +9,7 @@ import ConfirmAlert from './../../components/Alerts/ConfirmAlert'
 import ActionFormater from './../../components/Tables/ActionFormater'
 // reactstrap components
 import { Card, CardHeader, Container, Row, Col, Button } from 'reactstrap'
+import { getApp } from './../../actions/apps'
 
 //MoonLoader css
 const override = css`
@@ -16,7 +17,7 @@ const override = css`
   margin: 4rem auto;
 `
 
-const AllApplications = ({ apps, deleteApp, history }) => {
+const AllApplications = ({ apps, deleteApp, history, getApp }) => {
   const [alerts, setAlerts] = useState({
     alert: false,
     id: '',
@@ -25,10 +26,13 @@ const AllApplications = ({ apps, deleteApp, history }) => {
   const data = [...apps.apps]
   data.forEach(app => (app['permissionCount'] = app.permissions.length))
 
-  const editApp = app => {
-    return history.push({
-      pathname: `/admin/applications/edit-application/${app._id}`,
-    })
+  const editApp = async app => {
+    const res = await getApp(app._id)
+    return res
+      ? history.push({
+          pathname: `/admin/applications/edit-application/${app._id}`,
+        })
+      : null
   }
 
   const onConfirm = () => {
@@ -125,6 +129,7 @@ const AllApplications = ({ apps, deleteApp, history }) => {
 
 AllApplications.propTypes = {
   apps: PropTypes.object.isRequired,
+  getApp: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -133,5 +138,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {}
+  { getApp }
 )(AllApplications)

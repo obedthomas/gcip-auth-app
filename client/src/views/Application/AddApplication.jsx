@@ -74,7 +74,7 @@ const AddApplication = ({ history, addApp }) => {
                 <Col lg="6">
                   <FormInput
                     type="textarea"
-                    row="6"
+                    rows="6"
                     resize="none"
                     name="comments"
                     value={comments}

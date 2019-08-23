@@ -1,10 +1,19 @@
-import React, { useState } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { ScaleLoader } from 'react-spinners'
 import { css } from '@emotion/core'
 // reactstrap components
-import { Container, Row, Col, Form, Button } from 'reactstrap'
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  FormGroup,
+  Input,
+  InputGroup,
+} from 'reactstrap'
 // core components
 import FormCard from '../../components/FormInputs/FormCard'
 import FormInput from '../../components/FormInputs/FormInput'
@@ -15,110 +24,126 @@ const override = css`
   margin: 4rem auto;
 `
 
-const EditApplication = ({ history, app }) => {
-  const [formData, setFormData] = useState({
-    name: '',
+class EditApplication extends Component {
+  state = {
+    ...this.props.app.details,
     nameCheck: null,
-    comments: '',
-    permissionName: '',
     permissionNameCheck: null,
-    users: '',
     usersCheck: null,
-  })
-  const {
-    name,
-    nameCheck,
-    comments,
-    permissionName,
-    permissionNameCheck,
-    users,
-    usersCheck,
-  } = formData
+  }
 
-  const onChange = (e, required, type, length) => {
+  onChange = (e, required, type, length) => {
     const { value, name } = e.target
     // validate Input fields
     if (required && type === 'text' && value.length >= length) {
-      setFormData({
-        ...formData,
+      this.setState({
+        ...this.state,
         [name]: value,
         [`${name}Check`]: true,
       })
     } else {
-      setFormData({
-        ...formData,
+      this.setState({
+        ...this.state,
         [name]: value,
         [`${name}Check`]: false,
       })
     }
   }
 
-  const onSubmit = async e => {
+  onSubmit = async e => {
     e.preventDefault()
-    console.log(formData)
+    console.log(this.state)
   }
 
-  return (
-    <Container className="mt--7" fluid>
-      <Col className="order-xl-1 px-0" xl="12">
-        <FormCard
-          title={'Edit Application'}
-          btnText="Back"
-          onClick={history.goBack}
-        >
-          {!app.loading ? (
-            <Row>
-              <ScaleLoader
-                css={override}
-                sizeUnit={'px'}
-                size={60}
-                color={'#11cdef'}
-              />
-            </Row>
-          ) : (
-            <Form onSubmit={onSubmit}>
-              {/* form section */}
-              <h6 className="heading-small text-muted mb-4">
-                Application information
-              </h6>
-              <div className="pl-lg-4">
-                <Row>
-                  <Col lg="6">
-                    <FormInput
-                      type="text"
-                      name="name"
-                      value={name}
-                      valid={nameCheck}
-                      onChange={onChange}
-                      label="Application Name"
-                      required
-                      length={4}
-                    />
-                  </Col>
-                  <Col lg="6">
-                    <FormInput
-                      type="textarea"
-                      row="6"
-                      resize="none"
-                      name="comments"
-                      value={comments}
-                      onChange={onChange}
-                      label="Comments"
-                    />
-                  </Col>
-                </Row>
-              </div>
-              <Row className="justify-content-end">
-                <Button className="mr-3" color="success" type="submit">
-                  Submit
-                </Button>
+  render() {
+    const {
+      name,
+      nameCheck,
+      comments,
+      permissionName,
+      permissionNameCheck,
+      users,
+      usersCheck,
+    } = this.state
+    const { history, app } = this.props
+
+    return (
+      <Container className="mt--7" fluid>
+        <Col className="order-xl-1 px-0" xl="12">
+          <FormCard
+            title={'Edit Application'}
+            btnText="Back"
+            onClick={history.goBack}
+          >
+            {app.loading ? (
+              <Row>
+                <ScaleLoader
+                  css={override}
+                  sizeUnit={'px'}
+                  size={60}
+                  color={'#11cdef'}
+                />
               </Row>
-            </Form>
-          )}
-        </FormCard>
-      </Col>
-    </Container>
-  )
+            ) : (
+              <Form onSubmit={this.onSubmit}>
+                {/* form section */}
+                <h6 className="heading-small text-muted mb-4">
+                  Application information
+                </h6>
+                <div className="pl-lg-4">
+                  <Row>
+                    <Col lg="6">
+                      <FormInput
+                        type="text"
+                        name="name"
+                        value={name}
+                        valid={nameCheck}
+                        onChange={this.onChange}
+                        label="Application Name"
+                        required
+                        length={4}
+                      />
+                    </Col>
+                    <Col lg="6">
+                      <FormGroup>
+                        <Row>
+                          <label
+                            className="form-control-label"
+                            htmlFor="comments"
+                          >
+                            Comments
+                          </label>
+                        </Row>
+                        <InputGroup className="input-group-alternative mb-3">
+                          <Input
+                            type="textarea"
+                            resize="none"
+                            id="comments"
+                            name="comments"
+                            value={comments}
+                            rows="6"
+                            onChange={e =>
+                              this.onChange(e, false, 'textarea', false)
+                            }
+                          ></Input>
+                        </InputGroup>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </div>
+                <Row className="py-3">permission table</Row>
+                <Row className="justify-content-end">
+                  <Button className="mr-3" color="success" type="submit">
+                    Submit
+                  </Button>
+                </Row>
+              </Form>
+            )}
+          </FormCard>
+        </Col>
+      </Container>
+    )
+  }
 }
 
 EditApplication.propTypes = {
@@ -127,7 +152,7 @@ EditApplication.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  app: state.apps.editApp,
+  app: state.apps.appDetails,
 })
 
 export default connect(
