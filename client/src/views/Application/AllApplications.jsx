@@ -27,8 +27,7 @@ const AllApplications = ({ apps, deleteApp, history }) => {
 
   const editApp = app => {
     return history.push({
-      pathname: '/admin/applications/edit-application',
-      state: { app },
+      pathname: `/admin/applications/edit-application/${app._id}`,
     })
   }
 

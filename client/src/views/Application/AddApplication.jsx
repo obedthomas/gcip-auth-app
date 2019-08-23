@@ -2,18 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 // reactstrap components
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Input,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroup,
-  FormGroup,
-} from 'reactstrap'
+import { Container, Row, Col, Form, Button } from 'reactstrap'
 // core components
 import FormCard from '../../components/FormInputs/FormCard'
 import FormInput from '../../components/FormInputs/FormInput'
@@ -24,16 +13,8 @@ const AddApplication = ({ history, addApp }) => {
     appName: '',
     appNameCheck: null,
     comments: '',
-    permissions: [{ permissionName: '', users: [] }],
-    permissionNameCheck: '',
   })
-  const {
-    appName,
-    appNameCheck,
-    comments,
-    permissions,
-    permissionNameCheck,
-  } = formData
+  const { appName, appNameCheck, comments } = formData
 
   const onChange = (e, required, type, length) => {
     const { value, name } = e.target
@@ -59,8 +40,8 @@ const AddApplication = ({ history, addApp }) => {
       name: appName,
       comments,
     }
-    await addApp(data)
-    return history.push('/admin/applications')
+    const send = await addApp(data)
+    return send ? history.push('/admin/applications') : null
   }
 
   return (
@@ -115,7 +96,9 @@ const AddApplication = ({ history, addApp }) => {
   )
 }
 
-AddApplication.propTypes = {}
+AddApplication.propTypes = {
+  addApp: PropTypes.func.isRequired,
+}
 
 export default connect(
   null,
