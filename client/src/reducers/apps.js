@@ -5,6 +5,7 @@ import {
   FETCH_SINGLE_APP,
   RECEIVE_SINGLE_APP,
   FAILED_FETCH_SINGLE_APP,
+  UPDATE_SINGLE_APP,
 } from '../actions/types'
 
 const initalState = {
@@ -34,6 +35,15 @@ export default (state = initalState, { type, payload }) => {
 
     case RECEIVE_SINGLE_APP:
       return { ...state, appDetails: { loading: false, details: payload } }
+
+    case UPDATE_SINGLE_APP:
+      return {
+        ...state,
+        appDetails: {
+          ...state.appDetails,
+          details: payload,
+        },
+      }
 
     case FAILED_FETCH_SINGLE_APP:
       return { ...state, appDetails: { loading: false, errors: payload } }

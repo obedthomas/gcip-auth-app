@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const ObjectId = require('mongoose').Types.ObjectId
 const { check, validationResult } = require('express-validator')
 const auth = require('../../middleware/auth')
 // Models
@@ -282,6 +283,85 @@ router.put(
         ? res
             .status(404)
             .json({ errors: [{ msg: 'Permission does not exist' }] })
+        : res.status(500).send('Server Error')
+    }
+  }
+)
+
+// @type    :   PUT
+// @route   :   api/application/:id/2
+// @desc    :   Update application
+// @access  :   Private/admin
+router.put(
+  '/:id/2',
+  [
+    auth('admin'),
+    [
+      // Validation
+      check('name', 'Name of permission is required')
+        .not()
+        .isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    // Handle req params to see if information is valid
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() })
+    }
+
+    try {
+      // if no errors
+      const { name, comments, permissions } = req.body
+      // check if application exists
+      let app = await App.findById(req.params.id)
+      if (!app) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Application does not exist' }] })
+      }
+
+      // check if permissions are new or not
+      let newPerms = []
+      for (let i = 0; i < permissions.length; i++) {
+        // check is object id is valid. new perms will NOT have a valid id
+        if (!ObjectId.isValid(permissions[i]._id)) {
+          let newUsers = []
+          for (let y = 0; y < permissions[i].users.length; y++) {
+            newUsers.push(`${permissions[i].users[y]._id}`)
+          }
+          const p = new Permission({
+            permissionName: permissions[i].permissionName,
+            users: newUsers,
+          })
+          // add new permission
+          await p.save()
+          newPerms.push(p)
+        } else {
+          // update existing permissions
+          // search through db and update
+          let currentUsers = []
+          // for loop to clean up the array given by req. remove any unwanted details.
+          for (let y = 0; y < permissions[i].users.length; y++) {
+            currentUsers.push(`${permissions[i].users[y]._id}`)
+          }
+          let perm = await Permission.findByIdAndUpdate(permissions[i]._id, {
+            permissionName: permissions[i].permissionName,
+            users: currentUsers,
+          })
+        }
+      }
+
+      app.name = name
+      app.comments = comments
+      // save new app
+      await app.save()
+      // return
+      return res.json({ msg: 'Application has been edited' })
+    } catch (err) {
+      console.error(err.message)
+      return err.kind === 'ObjectId'
+        ? res.status(404).json({ errors: [{ msg: 'Application not found' }] })
         : res.status(500).send('Server Error')
     }
   }

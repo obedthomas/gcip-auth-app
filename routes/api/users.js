@@ -25,6 +25,30 @@ router.get('/', auth('all'), async (req, res) => {
 })
 
 // @type    :   GET
+// @route   :   api/user/options
+// @desc    :   Get an array of all users to use as OPTIONS
+// @access  :   PRIVATE
+router.get('/options', auth('all'), async (req, res) => {
+  try {
+    const users = await User.find().select(
+      '-password -company -department -role -createdOn -changePasswordToken -active'
+    )
+    let options = []
+    for (let i = 0; i < users.length; ++i) {
+      options.push({
+        _id: users[i]._id,
+        id: users[i]._id,
+        text: `${users[i].firstName} ${users[i].lastName}`,
+      })
+    }
+    res.json(options)
+  } catch (err) {
+    console.error(err.message)
+    return res.status(500).send('Server Error')
+  }
+})
+
+// @type    :   GET
 // @route   :   api/user/:id
 // @desc    :   Get an array of all users
 // @access  :   PRIVATE

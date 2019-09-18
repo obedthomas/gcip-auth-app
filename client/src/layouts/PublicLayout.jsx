@@ -46,9 +46,7 @@ class PublicLayout extends Component {
           <PublicNavbar />
           <PublicHeader
             title={'Welcome'}
-            desc={
-              'Please login on register to an account so in order to access our APIs'
-            }
+            desc={'You must login to manage access to Global Challenge APIs'}
           />
           {/* Page Content */}
           <Container className="mt--8 pb-5">

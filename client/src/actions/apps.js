@@ -6,6 +6,7 @@ import {
   FETCH_SINGLE_APP,
   RECEIVE_SINGLE_APP,
   FAILED_FETCH_SINGLE_APP,
+  UPDATE_SINGLE_APP,
 } from './types'
 import { setAlert } from './alert'
 import { setLoader } from './loading'
@@ -62,6 +63,47 @@ export const getApp = id => async dispatch => {
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
       dispatch({ type: FAILED_FETCH_SINGLE_APP, payload: errors })
+    }
+  }
+}
+
+// send updated app details to API
+export const updateAppDetails = (appId, data, history) => async dispatch => {
+  dispatch(setLoader(true))
+  const config = {
+    headers: { 'Content-Type': 'application/json' },
+  }
+  const body = JSON.stringify(data)
+  try {
+    const res = await axios.put(`/api/application/${appId}/2`, body, config)
+    dispatch(setAlert(res.data.msg, 'success'))
+    dispatch(setLoader(false))
+    history.push('/admin/applications')
+  } catch (err) {
+    dispatch(setLoader(false))
+    // handle error sent by API
+    const errors = err.response.data.errors
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
+    }
+  }
+}
+
+export const editPermission = (appId, permId, data) => async dispatch => {
+  dispatch(setLoader(true))
+  const config = {
+    headers: { 'Content-Type': 'application/json' },
+  }
+  const body = JSON.stringify(data)
+  try {
+    await axios.put(`/api/application/permissions/${permId}`, body, config)
+    dispatch(setLoader(false))
+  } catch (err) {
+    dispatch(setLoader(false))
+    // handle error sent by API
+    const errors = err.response.data.errors
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')))
     }
   }
 }

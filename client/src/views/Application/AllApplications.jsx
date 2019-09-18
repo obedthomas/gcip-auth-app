@@ -9,7 +9,6 @@ import ConfirmAlert from './../../components/Alerts/ConfirmAlert'
 import ActionFormater from './../../components/Tables/ActionFormater'
 // reactstrap components
 import { Card, CardHeader, Container, Row, Col, Button } from 'reactstrap'
-import { getApp } from './../../actions/apps'
 
 //MoonLoader css
 const override = css`
