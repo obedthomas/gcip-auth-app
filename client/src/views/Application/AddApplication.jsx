@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 // reactstrap components
 import { Container, Row, Col, Form, Button } from 'reactstrap'
 // core components
@@ -37,7 +38,7 @@ const AddApplication = ({ history, addApp }) => {
   const onSubmit = async e => {
     e.preventDefault()
     const data = {
-      name: appName,
+      name: _.capitalize(appName),
       comments,
     }
     const send = await addApp(data)

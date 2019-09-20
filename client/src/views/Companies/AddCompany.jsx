@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import _ from 'lodash'
 // reactstrap components
 import { Container, Row, Col, Form, Button } from 'reactstrap'
 // core components
@@ -36,7 +37,7 @@ const AddCompany = ({ history, addCompany }) => {
   const onSubmit = async e => {
     e.preventDefault()
     const data = {
-      name: companyName,
+      name: _.capitalize(companyName),
     }
     await addCompany(data, history.push)
   }
