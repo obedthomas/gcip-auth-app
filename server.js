@@ -2,8 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const helmet = require('helmet')
 const connectDB = require('./config/db')
-// test imports
-const auth = require('./middleware/auth')
+const path = require('path')
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -28,6 +27,15 @@ app.use('/api/user', require('./routes/api/users'))
 app.use('/api/company', require('./routes/api/company'))
 app.use('/api/application', require('./routes/api/application'))
 app.use('/api/stats', require('./routes/api/stats'))
+
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('client/build'))
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  })
+}
 
 // Listen to PORT
 app.listen(PORT, () => console.log(`Sever started on port: ${PORT}`))
