@@ -41,10 +41,10 @@ const DashboardHeader = ({ stats }) => {
               </Col>
               <Col lg="6" xl="3">
                 <StatCard
-                  title="Total Users"
-                  stat={8}
-                  icon="address-card"
-                  color="bg-info"
+                  title="Permissions"
+                  stat={stats.loading ? 'Loading...' : stats.totals.permTotal}
+                  icon="key"
+                  color="bg-primary"
                 />
               </Col>
             </Row>

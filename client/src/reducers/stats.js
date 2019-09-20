@@ -5,6 +5,7 @@ const initialState = {
     companyTotal: null,
     userTotal: null,
     appTotal: null,
+    permTotals: null,
   },
   loading: true,
 }
