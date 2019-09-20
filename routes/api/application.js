@@ -2,6 +2,7 @@ const router = require('express').Router()
 const ObjectId = require('mongoose').Types.ObjectId
 const { check, validationResult } = require('express-validator')
 const auth = require('../../middleware/auth')
+const _ = require('lodash')
 // Models
 const User = require('../../models/User')
 const App = require('../../models/Application')
@@ -84,62 +85,6 @@ router.post(
     } catch (err) {
       console.error(err.message)
       return res.status(500).send('Server Error')
-    }
-  }
-)
-
-// @type    :   PUT
-// @route   :   api/application/:id
-// @desc    :   Edit name and comments of application
-// @access  :   PRIVATE/admin
-router.put(
-  '/:id',
-  [
-    auth('admin'),
-    [
-      // Validation
-      check('name', 'Name of application is required')
-        .not()
-        .isEmpty(),
-    ],
-  ],
-  async (req, res) => {
-    // Handle req params to see if information is valid
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() })
-    }
-
-    try {
-      // if no errors
-      const { name, comments } = req.body
-      // check if application exists
-      let app = await App.findById(req.params.id)
-      if (!app) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Application does not exist' }] })
-      }
-      // if app exists
-      // check if name already exists
-      const isMatch = await App.findOne({ name })
-      if (isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'Application name already taken' }] })
-      }
-      // if name does not exist
-      app.name = name
-      app.comments = comments
-      // save new app
-      await app.save()
-      // return
-      return res.json({ msg: 'Application has been edited' })
-    } catch (err) {
-      console.error(err.message)
-      return err.kind === 'ObjectId'
-        ? res.status(404).json({ errors: [{ msg: 'Application not found' }] })
-        : res.status(500).send('Server Error')
     }
   }
 )
@@ -289,11 +234,11 @@ router.put(
 )
 
 // @type    :   PUT
-// @route   :   api/application/:id/2
+// @route   :   api/application/:id
 // @desc    :   Update application
 // @access  :   Private/admin
 router.put(
-  '/:id/2',
+  '/:id',
   [
     auth('admin'),
     [
@@ -320,9 +265,8 @@ router.put(
           .status(400)
           .json({ errors: [{ msg: 'Application does not exist' }] })
       }
-
-      // check if permissions are new or not
       let newPerms = []
+      // check if permissions are new or not
       for (let i = 0; i < permissions.length; i++) {
         // check is object id is valid. new perms will NOT have a valid id
         if (!ObjectId.isValid(permissions[i]._id)) {
@@ -336,7 +280,7 @@ router.put(
           })
           // add new permission
           await p.save()
-          newPerms.push(p)
+          app.permissions.push(p)
         } else {
           // update existing permissions
           // search through db and update
@@ -351,7 +295,27 @@ router.put(
           })
         }
       }
+      // delete permissions
+      if (app.permissions.length > permissions.length) {
+        let cleanPerms = []
+        let appPerms = []
+        for (let i = 0; i < app.permissions.length; i++) {
+          appPerms.push(`${app.permissions[i]}`)
+        }
+        // cleans up the permission object to compare just the IDs
+        for (let i = 0; i < permissions.length; i++) {
+          cleanPerms.push(permissions[i]._id)
+        }
 
+        const permsToDelete = _.difference(appPerms, cleanPerms)
+
+        for (let i = 0; i < permsToDelete.length; i++) {
+          let p = await Permission.findById(permsToDelete[i])
+          if (p) await p.remove()
+          app.permissions.pull({ _id: p._id })
+        }
+      }
+      // save app
       app.name = name
       app.comments = comments
       // save new app

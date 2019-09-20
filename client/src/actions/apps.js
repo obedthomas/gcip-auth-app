@@ -75,9 +75,10 @@ export const updateAppDetails = (appId, data, history) => async dispatch => {
   }
   const body = JSON.stringify(data)
   try {
-    const res = await axios.put(`/api/application/${appId}/2`, body, config)
+    const res = await axios.put(`/api/application/${appId}`, body, config)
     dispatch(setAlert(res.data.msg, 'success'))
     dispatch(setLoader(false))
+    dispatch(getApps())
     history.push('/admin/applications')
   } catch (err) {
     dispatch(setLoader(false))
@@ -89,15 +90,13 @@ export const updateAppDetails = (appId, data, history) => async dispatch => {
   }
 }
 
-export const editPermission = (appId, permId, data) => async dispatch => {
+export const deleteApp = id => async dispatch => {
   dispatch(setLoader(true))
-  const config = {
-    headers: { 'Content-Type': 'application/json' },
-  }
-  const body = JSON.stringify(data)
   try {
-    await axios.put(`/api/application/permissions/${permId}`, body, config)
+    const res = await axios.delete(`/api/application/${id}`)
+    dispatch(setAlert(res.data.msg, 'success'))
     dispatch(setLoader(false))
+    dispatch(getApps())
   } catch (err) {
     dispatch(setLoader(false))
     // handle error sent by API

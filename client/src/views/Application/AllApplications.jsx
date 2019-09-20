@@ -9,6 +9,7 @@ import ConfirmAlert from './../../components/Alerts/ConfirmAlert'
 import ActionFormater from './../../components/Tables/ActionFormater'
 // reactstrap components
 import { Card, CardHeader, Container, Row, Col, Button } from 'reactstrap'
+import { deleteApp } from './../../actions/apps'
 
 //MoonLoader css
 const override = css`
@@ -33,8 +34,7 @@ const AllApplications = ({ apps, deleteApp, history }) => {
 
   const onConfirm = () => {
     // make delete call to api
-    if (alerts.id) console.log('sent')
-
+    if (alerts.id) deleteApp(alerts.id)
     // reset alert state
     return setAlerts({ alert: false, id: '' })
   }
@@ -133,5 +133,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  {}
+  { deleteApp }
 )(AllApplications)
