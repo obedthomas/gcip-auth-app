@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Field, FieldArray } from 'redux-form'
 // reactstrap components
 import {
@@ -7,14 +6,12 @@ import {
   Card,
   CardBody,
   CardTitle,
-  ListGroup,
   InputGroup,
   Row,
   Col,
 } from 'reactstrap'
 import InputField from '../../../components/FormInputs/InputField'
 import EditPerm from './EditPerm'
-import AddUserToPerm from './AddUserToPerm'
 
 const PermissionCards = ({ fields, userOptions }) => {
   return (

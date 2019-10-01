@@ -8,7 +8,7 @@ import { Redirect } from 'react-router-dom'
 // reactstrap components
 import { Button, Card, CardBody, Form, Row, Col } from 'reactstrap'
 
-const Login = ({ login, history, auth, location }) => {
+const Login = ({ login, history, auth }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',

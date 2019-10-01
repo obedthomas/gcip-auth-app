@@ -6,7 +6,6 @@ import {
   FETCH_SINGLE_APP,
   RECEIVE_SINGLE_APP,
   FAILED_FETCH_SINGLE_APP,
-  UPDATE_SINGLE_APP,
 } from './types'
 import { setAlert } from './alert'
 import { setLoader } from './loading'

@@ -13,7 +13,7 @@ import setAuthToken from './../utils/setAuthToken'
 import { getUsers } from './users'
 
 // Login user
-export const login = (email, password, history) => async dispatch => {
+export const login = (email, password) => async dispatch => {
   const config = {
     headers: { 'Content-Type': 'application/json' },
   }
