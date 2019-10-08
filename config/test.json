@@ -1,0 +1,11 @@
+{
+  "clientUrl": "http://10.10.10.10:3000/",
+  "mongoURI": "mongodb://dev:******@10.10.10.110:27017/gcip-auth-api",
+  "jwtSecret": "secret-here",
+  "tokenExpiryTime": "2d",
+  "mailgun": {
+    "key": "key",
+    "pubKey": "pubkey",
+    "domain": "mg.gcipltd.com"
+  }
+}
